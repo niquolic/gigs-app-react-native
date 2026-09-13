@@ -24,6 +24,6 @@ export const storage = {
     await AsyncStorage.setItem(KEYS.USER_ID, userId);
   },
   async clear(): Promise<void> {
-    await AsyncStorage.multiRemove([KEYS.TOKEN, KEYS.USER_ID]);
+    await AsyncStorage.removeMany([KEYS.TOKEN, KEYS.USER_ID]);
   },
 };

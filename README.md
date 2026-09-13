@@ -64,6 +64,24 @@ En développement (`npx expo start`), elle pointe vers `http://127.0.0.1:8080`
 - Téléphone physique / simulateur iOS → remplace par l'IP locale de ta machine
   (ex. `http://192.168.1.42:8080`), ou utilise un tunnel type `ngrok`.
 
+## Dépannage
+
+Si tu rencontres une erreur du type `Cannot find module 'react-native-worklets/plugin'`
+au lancement (`npx expo start`), c'est un souci connu de résolution de dépendances
+avec NativeWind. Il suffit de supprimer complètement `node_modules` et de
+réinstaller :
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+npx expo start -c
+```
+
+Toutes les versions du projet (Expo SDK 57, React 19, React Native 0.86,
+NativeWind 4.2.6, Reanimated/Worklets, React Navigation 7...) sont épinglées
+dans `package.json` pour être mutuellement compatibles — inutile d'en changer
+une isolément.
+
 ## Structure
 
 ```
