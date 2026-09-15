@@ -12,7 +12,7 @@ type EnvConfig = {
 const ENV: Record<"development" | "production", EnvConfig> = {
   development: {
     production: false,
-    apiUrl: "http://127.0.0.1:8080",
+    apiUrl: "http://192.168.1.127:8080", //remettre 127.0.0.1
   },
   production: {
     production: true,
