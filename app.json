@@ -4,9 +4,10 @@
     "slug": "gigs-app-react-native",
     "version": "1.0.0",
     "orientation": "default",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0B1120",
     "splash": {
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0B1120"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -20,9 +21,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0B1120"
       },
-      "package": "com.gigsapp.mobile"
+      "package": "com.gigsapp.mobile",
+      "usesCleartextTraffic": true
     },
     "web": {
       "bundler": "metro"

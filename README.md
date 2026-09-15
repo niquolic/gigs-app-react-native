@@ -97,6 +97,28 @@ src/
   utils/          storage.ts (AsyncStorage), jwt.ts (décodage/expiration)
 ```
 
+## Design
+
+Redesign complet façon "app à sortir demain sur l'App Store" plutôt qu'un
+simple portage fonctionnel :
+
+- **Palette bleu-nuit** (`#0B1120` → `#080B14`) avec un accent indigo
+  électrique (`#6366F1`, esprit éclairage de scène) et un doré chaud
+  (`#F5B942`) pour les prix — clin d'œil aux tickets de concert.
+- **Police Sora** (`@expo-google-fonts/sora`) pour les titres et les gros
+  chiffres, police système pour le reste — cohérent avec `tailwind.config.js`
+  (`font-display`, `font-display-semibold`, `font-display-medium`).
+- **`GigCard`** : la liste de concerts prend la forme d'un vrai ticket
+  (souche date à gauche, ligne pointillée de "déchirure", encoches sur les
+  bords) plutôt qu'une carte générique.
+- **`CustomTabBar`** : barre d'onglets flottante avec un bouton "+" central
+  surélevé en dégradé, façon app musicale, plutôt qu'un 3ᵉ onglet plat.
+- **`StatTile` / `RankedList`** : l'écran Stats mélange tuiles à icônes
+  (2×2) et classements façon leaderboard (médailles or/argent/bronze) pour
+  les groupes et pays les plus vus.
+- **`GigForm`** : les groupes se saisissent en chips (tags) plutôt qu'en
+  inputs répétés.
+
 ## Choix techniques notables
 
 - **Cartes plutôt que tableau** : sur mobile, un `<table>` HTML façon Angular
@@ -105,12 +127,8 @@ src/
 - **Formulaire mutualisé** (`GigForm.tsx`) entre "Ajouter" et "Modifier", alors
   que le projet Angular dupliquait la logique entre `add-gigs-form` et
   `edit-gig-form`.
-- **Responsive** : l'écran Statistiques passe automatiquement de 1 à 2 colonnes
-  selon la largeur d'écran (`useWindowDimensions`), pour bien s'adapter des
-  petits téléphones aux tablettes/au web.
 - **NativeWind partout** : quasiment aucune StyleSheet, tout est en classes
-  Tailwind (`className`), pour rester au plus proche de "le moins de spécifique
-  possible" demandé.
+  Tailwind (`className`).
 
 ## Pousser ce repo sur GitHub
 

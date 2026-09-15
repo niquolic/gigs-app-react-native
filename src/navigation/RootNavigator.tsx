@@ -1,6 +1,6 @@
 import React from "react";
 import { View, ActivityIndicator } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "@/context/AuthContext";
 import LoginScreen from "@/screens/LoginScreen";
@@ -9,6 +9,19 @@ import MainTabs from "./MainTabs";
 import { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// Thème sombre custom pour que les zones non couvertes par nos écrans
+// (transitions, fonds de statusbar) restent bleu-nuit plutôt que blanches.
+const NavTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: "#0B1120",
+    card: "#0B1120",
+    border: "#1B2540",
+    primary: "#6366F1",
+  },
+};
 
 /**
  * Équivalent de app-routing.module.ts : selon isAuthenticated (dérivé du
@@ -20,14 +33,14 @@ export default function RootNavigator() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#007bff" />
+      <View className="flex-1 items-center justify-center bg-night-900">
+        <ActivityIndicator size="large" color="#6366F1" />
       </View>
     );
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={NavTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isAuthenticated ? (
           <Stack.Screen name="Login" component={LoginScreen} />
@@ -37,7 +50,7 @@ export default function RootNavigator() {
             <Stack.Screen
               name="EditGig"
               component={EditGigScreen}
-              options={{ headerShown: true, title: "Modifier le concert" }}
+              options={{ presentation: "modal" }}
             />
           </>
         )}

@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator, useWindowDimensions } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import StatBlock from "@/components/StatBlock";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import StatTile from "@/components/StatTile";
+import RankedList from "@/components/RankedList";
 import { useAuth } from "@/context/AuthContext";
 import {
   getBandsStats,
@@ -33,12 +35,9 @@ const initialState: StatsState = {
 
 export default function StatsScreen() {
   const { userId } = useAuth();
+  const insets = useSafeAreaInsets();
   const [stats, setStats] = useState<StatsState>(initialState);
   const [loading, setLoading] = useState(true);
-  const { width } = useWindowDimensions();
-  // Sur tablette / desktop (web), on affiche 2 colonnes comme l'original ;
-  // sur téléphone, une seule colonne pour rester lisible.
-  const isWide = width >= 700;
 
   const loadStats = useCallback(async () => {
     if (!userId) return;
@@ -74,59 +73,40 @@ export default function StatsScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-gray-50">
-        <ActivityIndicator size="large" color="#007bff" />
+      <View className="flex-1 items-center justify-center bg-night-900">
+        <ActivityIndicator size="large" color="#6366F1" />
       </View>
     );
   }
 
   return (
-    <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ padding: 16 }}>
-      <View className={isWide ? "flex-row flex-wrap justify-between" : "flex-col"}>
-        <View className={isWide ? "w-[48%]" : "w-full"}>
-          <StatBlock title="Groupes que vous avez le plus vus">
-            {stats.bandsStats.length === 0 ? (
-              <Text className="text-gray-500">Vous n'avez pas renseigné de concerts.</Text>
-            ) : (
-              stats.bandsStats.map((b, i) => (
-                <Text key={i} className="text-gray-700">
-                  {b.band} - x{b.count}
-                </Text>
-              ))
-            )}
-          </StatBlock>
+    <ScrollView
+      className="flex-1 bg-night-900"
+      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 12, paddingBottom: 110 }}
+    >
+      <Text className="mb-1 text-sm text-ink-muted">Ton palmarès</Text>
+      <Text className="mb-5 font-display text-2xl text-ink">Statistiques</Text>
 
-          <StatBlock title="Nombre de concerts vus">
-            <Text className="text-2xl font-bold text-primary">{stats.totalNumberOfGigs}</Text>
-          </StatBlock>
-
-          <StatBlock title="Montant dépensé pour des concerts">
-            <Text className="text-2xl font-bold text-primary">{stats.totalPrice} €</Text>
-          </StatBlock>
-        </View>
-
-        <View className={isWide ? "w-[48%]" : "w-full"}>
-          <StatBlock title="Nombre de concerts vus cette année">
-            <Text className="text-2xl font-bold text-primary">{stats.totalNumberOfGigsThisYear}</Text>
-          </StatBlock>
-
-          <StatBlock title="Pays où vous avez vu le plus de concerts">
-            {stats.countryStats.length === 0 ? (
-              <Text className="text-gray-500">Vous n'avez pas renseigné de concerts.</Text>
-            ) : (
-              stats.countryStats.map((c, i) => (
-                <Text key={i} className="text-gray-700">
-                  {c.country} - x{c.count}
-                </Text>
-              ))
-            )}
-          </StatBlock>
-
-          <StatBlock title="Montant dépensé cette année">
-            <Text className="text-2xl font-bold text-primary">{stats.priceThisYear} €</Text>
-          </StatBlock>
-        </View>
+      <View className="mb-4 flex-row flex-wrap justify-between gap-y-3">
+        <StatTile icon="ticket-outline" value={stats.totalNumberOfGigs} label="Concerts vus" />
+        <StatTile icon="calendar-outline" value={stats.totalNumberOfGigsThisYear} label="Cette année" />
+        <StatTile icon="wallet-outline" value={`${stats.totalPrice} €`} label="Dépensé au total" tint="gold" />
+        <StatTile icon="trending-up-outline" value={`${stats.priceThisYear} €`} label="Dépensé cette année" tint="gold" />
       </View>
+
+      <RankedList
+        title="Groupes les plus vus"
+        icon="musical-notes-outline"
+        items={stats.bandsStats.map((b) => ({ label: b.band, count: b.count }))}
+        emptyLabel="Aucun concert renseigné pour l'instant."
+      />
+
+      <RankedList
+        title="Pays visités"
+        icon="earth-outline"
+        items={stats.countryStats.map((c) => ({ label: c.country, count: c.count }))}
+        emptyLabel="Aucun concert renseigné pour l'instant."
+      />
     </ScrollView>
   );
 }
