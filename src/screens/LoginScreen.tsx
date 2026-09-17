@@ -36,6 +36,7 @@ export default function LoginScreen() {
   };
 
   return (
+    
     <LinearGradient
       colors={["#141B2E", "#0B1120", "#080B14"]}
       className="flex-1"

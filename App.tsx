@@ -13,6 +13,7 @@ import {
 } from "@expo-google-fonts/sora";
 import { AuthProvider } from "@/context/AuthContext";
 import RootNavigator from "@/navigation/RootNavigator";
+import "@/utils/nativewind-interop";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 

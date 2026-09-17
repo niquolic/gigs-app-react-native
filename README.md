@@ -25,7 +25,7 @@ Même backend, mêmes endpoints, aucune modification côté serveur.
 | `pages/stats-gigs` + `components/stats-component` | `src/screens/StatsScreen.tsx` |
 
 **Endpoints appelés (identiques à l'original)** :
-`/getUserByLoginAndPassword`, `/getGigsByUserId`, `/getGigById`, `/addGigToList`,
+`/login`, `/register`, `/getGigsByUserId`, `/getGigById`, `/addGigToList`,
 `/editGig`, `/deleteGig`, `/getStatsOfUser`, `/getTotalNumberOfGigs`,
 `/getTotalNumberOfGigsThisYear`, `/getCountryStatsOfUser`, `/getTotalPrice`, `/getPriceThisYear`.
 
