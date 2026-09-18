@@ -13,3 +13,11 @@ export async function loginRequest(login: string, password: string): Promise<str
   });
   return response.data;
 }
+
+export async function registerRequest(login: string, password: string): Promise<string> {
+  const response = await apiClient.post<string>("/register", {
+    body: { login, password },
+    responseType: "text",
+  });
+  return response.data;
+}
