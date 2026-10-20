@@ -10,9 +10,17 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "@/context/AuthContext";
+import { RootStackParamList } from "@/navigation/types";
 
 export default function LoginScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const route = useRoute<RouteProp<RootStackParamList, "Login">>();
+  const [successMessage, setSuccessMessage] = useState<string | null>(
+    route.params?.registeredMessage ?? null
+  );
   const { login } = useAuth();
   const [userLogin, setUserLogin] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -22,6 +30,7 @@ export default function LoginScreen() {
 
   const onSubmit = async () => {
     setError(null);
+    setSuccessMessage(null);
     setLoading(true);
     try {
       await login(userLogin, userPassword);
@@ -99,6 +108,13 @@ export default function LoginScreen() {
             </View>
           </View>
 
+          {successMessage && (
+            <View className="mb-4 flex-row items-center rounded-xl bg-success/10 px-3 py-2">
+              <Ionicons name="checkmark-circle-outline" size={16} color="#34D399" />
+              <Text className="ml-2 flex-1 text-sm text-success">{successMessage}</Text>
+            </View>
+          )}
+
           {error && (
             <View className="mb-4 flex-row items-center rounded-xl bg-danger/10 px-3 py-2">
               <Ionicons name="alert-circle-outline" size={16} color="#F2545B" />
@@ -129,6 +145,17 @@ export default function LoginScreen() {
                 </>
               )}
             </LinearGradient>
+          </Pressable>
+
+          <Pressable
+            onPress={() => navigation.navigate("Register")}
+            className="mt-4 items-center"
+            hitSlop={8}
+          >
+            <Text className="text-sm text-ink-muted">
+              Pas encore de compte ?{" "}
+              <Text className="font-display-medium text-indigo-400">Créer un compte</Text>
+            </Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>

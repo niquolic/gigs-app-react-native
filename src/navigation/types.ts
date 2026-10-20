@@ -7,7 +7,8 @@ export type MainTabParamList = {
 };
 
 export type RootStackParamList = {
-  Login: undefined;
+  Login: { registeredMessage?: string } | undefined;
+  Register: undefined;
   Main: NavigatorScreenParams<MainTabParamList>;
   EditGig: { id: number };
 };

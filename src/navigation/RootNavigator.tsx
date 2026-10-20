@@ -4,6 +4,7 @@ import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "@/context/AuthContext";
 import LoginScreen from "@/screens/LoginScreen";
+import RegisterScreen from "@/screens/RegisterScreen";
 import EditGigScreen from "@/screens/EditGigScreen";
 import MainTabs from "./MainTabs";
 import { RootStackParamList } from "./types";
@@ -43,7 +44,10 @@ export default function RootNavigator() {
     <NavigationContainer theme={NavTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isAuthenticated ? (
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Main" component={MainTabs} />

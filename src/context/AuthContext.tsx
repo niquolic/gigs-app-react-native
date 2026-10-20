@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { loginRequest } from "@/api/auth";
+import { setUnauthorizedHandler } from "@/api/client";
 import { storage } from "@/utils/storage";
 import { decodeToken, isTokenExpired } from "@/utils/jwt";
 
@@ -18,9 +19,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
 
+  const logout = async () => {
+    await storage.clear();
+    setIsAuthenticated(false);
+    setUserId(null);
+  };
+
   // Au démarrage de l'app : équivalent du AuthGuard Angular qui vérifie
   // localStorage.getItem('token') avant d'autoriser l'accès aux pages.
   useEffect(() => {
+    // 401 pendant l'utilisation (token expiré/invalide) : déconnexion propre.
+    setUnauthorizedHandler(() => {
+      logout();
+    });
+
     (async () => {
       const token = await storage.getToken();
       const storedUserId = await storage.getUserId();
@@ -39,12 +51,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await storage.setUserId(decoded.userId.toString());
     setUserId(decoded.userId.toString());
     setIsAuthenticated(true);
-  };
-
-  const logout = async () => {
-    await storage.clear();
-    setIsAuthenticated(false);
-    setUserId(null);
   };
 
   const value = useMemo(
