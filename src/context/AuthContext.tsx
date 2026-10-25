@@ -34,13 +34,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     (async () => {
-      const token = await storage.getToken();
-      const storedUserId = await storage.getUserId();
-      if (token && !isTokenExpired(token)) {
-        setIsAuthenticated(true);
-        setUserId(storedUserId);
+      try {
+        const token = await storage.getToken();
+        const storedUserId = await storage.getUserId();
+        if (token && storedUserId && !isTokenExpired(token)) {
+          setIsAuthenticated(true);
+          setUserId(storedUserId);
+        }
+      } catch {
+        // Stockage illisible : on considère l'utilisateur déconnecté
+        // plutôt que de rester bloqué sur le spinner de démarrage.
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     })();
   }, []);
 
