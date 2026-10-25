@@ -1,3 +1,4 @@
+
 {
   "expo": {
     "name": "Gigs App",
@@ -6,10 +7,9 @@
     "orientation": "default",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#0B1120",
-    "splash": {
-      "backgroundColor": "#0B1120"
-    },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gigsapp.mobile",
@@ -23,11 +23,21 @@
       "adaptiveIcon": {
         "backgroundColor": "#0B1120"
       },
-      "package": "com.gigsapp.mobile",
-      "usesCleartextTraffic": true
+      "package": "com.gigsapp.mobile"
     },
     "web": {
       "bundler": "metro"
-    }
+    },
+    "plugins": [
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0B1120"
+        }
+      ],
+      "expo-status-bar"
+    ]
   }
 }
