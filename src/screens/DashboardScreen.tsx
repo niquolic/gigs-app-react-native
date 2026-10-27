@@ -60,11 +60,11 @@ export default function DashboardScreen() {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0];
   }, [gigs]);
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
     navigation.navigate("EditGig", { id });
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (gigId: string) => {
     if (!userId) return;
     Alert.alert("Supprimer ce concert ?", "Cette action est irréversible.", [
       { text: "Annuler", style: "cancel" },
@@ -73,7 +73,7 @@ export default function DashboardScreen() {
         style: "destructive",
         onPress: async () => {
           try {
-            await deleteGig(userId, id);
+            await deleteGig(gigId);
             loadGigs();
           } catch (e) {
             Alert.alert("Erreur", "La suppression a échoué.");

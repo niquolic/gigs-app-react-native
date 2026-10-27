@@ -1,5 +1,16 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, ActivityIndicator } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  ActivityIndicator,
+  InputAccessoryView,
+  Keyboard,
+  Platform,
+} from "react-native";
+import type { ScrollViewInstance, TextInputInstance } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { GigFormValues } from "@/types/gig";
@@ -27,9 +38,26 @@ type FieldProps = {
   onChangeText: (t: string) => void;
   placeholder: string;
   keyboardType?: "default" | "decimal-pad";
+  returnKeyType?: "done";
+  onSubmitEditing?: () => void;
+  inputAccessoryViewID?: string;
+  onFocus?: (input: TextInputInstance | null) => void;
 };
 
-function Field({ label, icon, value, onChangeText, placeholder, keyboardType }: FieldProps) {
+function Field({
+  label,
+  icon,
+  value,
+  onChangeText,
+  placeholder,
+  keyboardType,
+  returnKeyType,
+  onSubmitEditing,
+  inputAccessoryViewID,
+  onFocus,
+}: FieldProps) {
+  const inputRef = useRef<TextInputInstance>(null);
+
   return (
     <View className="mb-4">
       <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
@@ -38,11 +66,16 @@ function Field({ label, icon, value, onChangeText, placeholder, keyboardType }: 
       <View className="flex-row items-center rounded-xl border border-night-600 bg-night-800 px-4">
         <Ionicons name={icon} size={16} color="#5D6889" />
         <TextInput
+          ref={inputRef}
           value={value}
           onChangeText={onChangeText}
+          onFocus={() => onFocus?.(inputRef.current)}
           placeholder={placeholder}
           placeholderTextColor="#5D6889"
           keyboardType={keyboardType}
+          returnKeyType={returnKeyType}
+          onSubmitEditing={onSubmitEditing}
+          inputAccessoryViewID={inputAccessoryViewID}
           className="ml-3 h-12 flex-1 text-base text-ink"
         />
       </View>
@@ -58,6 +91,27 @@ function Field({ label, icon, value, onChangeText, placeholder, keyboardType }: 
 export default function GigForm({ initialValues, submitLabel, submitting, onSubmit }: Props) {
   const [values, setValues] = useState<GigFormValues>(initialValues ?? emptyValues);
   const [bandDraft, setBandDraft] = useState("");
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const scrollRef = useRef<ScrollViewInstance>(null);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  const scrollToFocusedField = (input: TextInputInstance | null) => {
+    if (!input) return;
+    scrollRef.current?.scrollResponderScrollNativeHandleToKeyboard(input, 120, true);
+  };
 
   const addBand = () => {
     const name = bandDraft.trim();
@@ -74,11 +128,14 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
     values.bands.length > 0 && values.city.trim().length > 0 && values.venue.trim().length > 0;
 
   return (
-    <ScrollView
-      className="flex-1 bg-night-900"
-      contentContainerStyle={{ padding: 20, paddingBottom: 60 }}
-      keyboardShouldPersistTaps="handled"
-    >
+    <View className="flex-1 bg-night-900">
+      <ScrollView
+        ref={scrollRef}
+        className="flex-1"
+        contentContainerStyle={{ padding: 20, paddingBottom: 60 }}
+        keyboardShouldPersistTaps="handled"
+        automaticallyAdjustKeyboardInsets
+      >
       <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
         Groupes / artistes
       </Text>
@@ -125,21 +182,25 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
         </Pressable>
       </View>
 
-      <Field label="Ville" icon="business-outline" value={values.city} onChangeText={(city) => setValues({ ...values, city })} placeholder="Paris" />
-      <Field label="Salle" icon="location-outline" value={values.venue} onChangeText={(venue) => setValues({ ...values, venue })} placeholder="Zénith, Bataclan..." />
-      <Field label="Pays" icon="flag-outline" value={values.country} onChangeText={(country) => setValues({ ...values, country })} placeholder="France" />
-      <Field label="Date" icon="calendar-outline" value={values.date} onChangeText={(date) => setValues({ ...values, date })} placeholder="AAAA-MM-JJ" />
+      <Field label="Ville" icon="business-outline" value={values.city} onChangeText={(city) => setValues({ ...values, city })} placeholder="Paris" onFocus={scrollToFocusedField} />
+      <Field label="Salle" icon="location-outline" value={values.venue} onChangeText={(venue) => setValues({ ...values, venue })} placeholder="Zénith, Bataclan..." onFocus={scrollToFocusedField} />
+      <Field label="Pays" icon="flag-outline" value={values.country} onChangeText={(country) => setValues({ ...values, country })} placeholder="France" onFocus={scrollToFocusedField} />
+      <Field label="Date" icon="calendar-outline" value={values.date} onChangeText={(date) => setValues({ ...values, date })} placeholder="AAAA-MM-JJ" onFocus={scrollToFocusedField} />
       <Field
         label="Prix"
         icon="pricetag-outline"
         value={String(values.price)}
-        onChangeText={(price) => setValues({ ...values, price })}
+        onChangeText={(price) => setValues({ ...values, price: price.replace(/,/g, ".") })}
         placeholder="0"
         keyboardType="decimal-pad"
+        returnKeyType="done"
+        onSubmitEditing={Keyboard.dismiss}
+        inputAccessoryViewID="price-keyboard-accessory"
+        onFocus={scrollToFocusedField}
       />
 
       <Pressable
-        onPress={() => onSubmit(values)}
+        onPress={() => onSubmit({ ...values, price: values.price.replace(/,/g, ".") })}
         disabled={!isValid || submitting}
         className="mt-2 overflow-hidden rounded-xl active:opacity-90"
         style={{ opacity: isValid ? 1 : 0.4 }}
@@ -157,6 +218,23 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
           )}
         </LinearGradient>
       </Pressable>
-    </ScrollView>
+      </ScrollView>
+
+      <InputAccessoryView nativeID="price-keyboard-accessory">
+        <View className="items-end border-t border-night-600 bg-night-800 px-4 py-2">
+          <Pressable onPress={Keyboard.dismiss} className="px-3 py-1">
+            <Text className="font-display-semibold text-indigo-400">Valider</Text>
+          </Pressable>
+        </View>
+      </InputAccessoryView>
+
+      {Platform.OS === "android" && keyboardVisible && (
+        <View className="absolute bottom-0 left-0 right-0 items-end border-t border-night-600 bg-night-800 px-4 py-2">
+          <Pressable onPress={Keyboard.dismiss} className="px-3 py-1">
+            <Text className="font-display-semibold text-indigo-400">Valider</Text>
+          </Pressable>
+        </View>
+      )}
+    </View>
   );
 }

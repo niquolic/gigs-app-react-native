@@ -1,5 +1,5 @@
 export interface Gig {
-  id: number;
+  id: string;
   userId?: number;
   bands: string[];
   city: string;

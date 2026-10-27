@@ -10,5 +10,5 @@ export type RootStackParamList = {
   Login: { registeredMessage?: string } | undefined;
   Register: undefined;
   Main: NavigatorScreenParams<MainTabParamList>;
-  EditGig: { id: number };
+  EditGig: { id: string };
 };

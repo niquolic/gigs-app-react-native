@@ -29,14 +29,14 @@ export async function editGig(userId: string, gig: Gig): Promise<void> {
   await apiClient.post("/editGig", gig, {
     params: { userId },
     responseType: "text",
+    headers: { "Content-Type": "application/json" },
   });
 }
 
-/** POST /deleteGig?userId= (le body est directement l'id du gig) */
-export async function deleteGig(userId: string, id: number): Promise<void> {
-  await apiClient.post("/deleteGig", id, {
-    params: { userId },
+/** DELETE /deleteGig?id= */
+export async function deleteGig(id: string): Promise<void> {
+  await apiClient.delete("/deleteGig", {
+    params: { id },
     responseType: "text",
-    headers: { "Content-Type": "application/json" },
   });
 }

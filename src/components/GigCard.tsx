@@ -5,8 +5,8 @@ import { Gig } from "@/types/gig";
 
 type Props = {
   gig: Gig;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 };
 
 const MONTHS = [
