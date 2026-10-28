@@ -31,13 +31,22 @@ const emptyValues: GigFormValues = {
   price: "",
 };
 
+function formatDateInput(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 8);
+  const year = digits.slice(0, 4);
+  const month = digits.slice(4, 6);
+  const day = digits.slice(6, 8);
+
+  return [year, month, day].filter(Boolean).join("-");
+}
+
 type FieldProps = {
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
   value: string;
   onChangeText: (t: string) => void;
   placeholder: string;
-  keyboardType?: "default" | "decimal-pad";
+  keyboardType?: "default" | "decimal-pad" | "number-pad";
   returnKeyType?: "done";
   onSubmitEditing?: () => void;
   inputAccessoryViewID?: string;
@@ -185,7 +194,7 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
       <Field label="Ville" icon="business-outline" value={values.city} onChangeText={(city) => setValues({ ...values, city })} placeholder="Paris" onFocus={scrollToFocusedField} />
       <Field label="Salle" icon="location-outline" value={values.venue} onChangeText={(venue) => setValues({ ...values, venue })} placeholder="Zénith, Bataclan..." onFocus={scrollToFocusedField} />
       <Field label="Pays" icon="flag-outline" value={values.country} onChangeText={(country) => setValues({ ...values, country })} placeholder="France" onFocus={scrollToFocusedField} />
-      <Field label="Date" icon="calendar-outline" value={values.date} onChangeText={(date) => setValues({ ...values, date })} placeholder="AAAA-MM-JJ" onFocus={scrollToFocusedField} />
+      <Field label="Date" icon="calendar-outline" value={values.date} onChangeText={(date) => setValues({ ...values, date: formatDateInput(date) })} placeholder="AAAA-MM-JJ" keyboardType="number-pad" onFocus={scrollToFocusedField} />
       <Field
         label="Prix"
         icon="pricetag-outline"
