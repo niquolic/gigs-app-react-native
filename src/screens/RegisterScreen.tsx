@@ -17,6 +17,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { registerRequest } from "@/api/auth";
 import { getApiErrorMessage } from "@/utils/apiError";
 import { RootStackParamList } from "@/navigation/types";
+import { useAuth } from "@/context/AuthContext";
 
 const CURRENCIES = [
   { code: "EUR", label: "Euro (€)" },
@@ -45,6 +46,7 @@ type PreferenceField = "currency" | "language";
 
 export default function RegisterScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { t } = useAuth();
   const [userLogin, setUserLogin] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -100,22 +102,22 @@ export default function RegisterScreen() {
           <View className="mb-4 h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/20">
             <Ionicons name="person-add-outline" size={28} color="#8B93FF" />
           </View>
-          <Text className="font-display text-3xl text-ink">Créer un compte</Text>
-          <Text className="mt-1 text-sm text-ink-muted">Rejoins Gigs en quelques secondes</Text>
+          <Text className="font-display text-3xl text-ink">{t("createAccount")}</Text>
+          <Text className="mt-1 text-sm text-ink-muted">{t("registerSubtitle")}</Text>
         </View>
 
         <View className="w-full max-w-sm rounded-3xl border border-night-600 bg-night-800/90 p-6">
           <View className="mb-4">
-            <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">Identifiant</Text>
+            <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">{t("identifier")}</Text>
             <View className="flex-row items-center rounded-xl border border-night-600 bg-night-900 px-4">
               <Ionicons name="person-outline" size={18} color="#5D6889" />
-              <TextInput value={userLogin} onChangeText={setUserLogin} placeholder="choisis un login"
+              <TextInput value={userLogin} onChangeText={setUserLogin} placeholder={t("registerPlaceholder")}
                 placeholderTextColor="#5D6889" autoCapitalize="none" className="ml-3 h-12 flex-1 text-base text-ink" />
             </View>
           </View>
 
           <View className="mb-3">
-            <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">Mot de passe</Text>
+            <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">{t("password")}</Text>
             <View className="flex-row items-center rounded-xl border border-night-600 bg-night-900 px-4">
               <Ionicons name="lock-closed-outline" size={18} color="#5D6889" />
               <TextInput value={userPassword} onChangeText={setUserPassword} placeholder="••••••••"
@@ -128,14 +130,14 @@ export default function RegisterScreen() {
 
           <View className="mb-4 flex-row gap-3">
             <View className="flex-1">
-              <Text className="mb-2 text-[10px] font-display-medium uppercase tracking-wide text-ink-faint">Devise · optionnel</Text>
+              <Text className="mb-2 text-[10px] font-display-medium uppercase tracking-wide text-ink-faint">{t("currencyOptional")}</Text>
               <Pressable onPress={() => setPreferencePicker("currency")} className="h-12 flex-row items-center justify-between rounded-xl border border-night-600 bg-night-900 px-3">
                 <Text numberOfLines={1} className="text-sm text-ink">{currency ?? "EUR"}</Text>
                 <Ionicons name="chevron-down" size={16} color="#5D6889" />
               </Pressable>
             </View>
             <View className="flex-1">
-              <Text className="mb-2 text-[10px] font-display-medium uppercase tracking-wide text-ink-faint">Langue · optionnel</Text>
+              <Text className="mb-2 text-[10px] font-display-medium uppercase tracking-wide text-ink-faint">{t("languageOptional")}</Text>
               <Pressable onPress={() => setPreferencePicker("language")} className="h-12 flex-row items-center justify-between rounded-xl border border-night-600 bg-night-900 px-3">
                 <Text className="text-sm text-ink">{language?.toUpperCase() ?? "EN"}</Text>
                 <Ionicons name="chevron-down" size={16} color="#5D6889" />
@@ -144,14 +146,14 @@ export default function RegisterScreen() {
           </View>
 
           <View className="mb-5">
-            <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">Confirmer le mot de passe</Text>
+            <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">{t("confirmPassword")}</Text>
             <View className="flex-row items-center rounded-xl border border-night-600 bg-night-900 px-4">
               <Ionicons name="lock-closed-outline" size={18} color="#5D6889" />
               <TextInput value={confirmPassword} onChangeText={setConfirmPassword} placeholder="••••••••"
                 placeholderTextColor="#5D6889" secureTextEntry={!showPassword} className="ml-3 h-12 flex-1 text-base text-ink" />
             </View>
             {confirmPassword.length > 0 && !passwordsMatch && (
-              <Text className="mt-2 text-xs text-danger">Les mots de passe ne correspondent pas.</Text>
+              <Text className="mt-2 text-xs text-danger">{t("passwordMismatch")}</Text>
             )}
           </View>
 
@@ -167,14 +169,14 @@ export default function RegisterScreen() {
             <LinearGradient colors={["#6366F1", "#4338CA"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
               className="h-12 flex-row items-center justify-center">
               {loading ? <ActivityIndicator color="#fff" /> : <>
-                <Text className="mr-2 text-base font-display-semibold text-white">Créer mon compte</Text>
+                <Text className="mr-2 text-base font-display-semibold text-white">{t("create")}</Text>
                 <Ionicons name="arrow-forward" size={18} color="#fff" />
               </>}
             </LinearGradient>
           </Pressable>
 
           <Pressable onPress={() => navigation.goBack()} className="mt-4 items-center" hitSlop={8}>
-            <Text className="text-sm text-ink-muted">Déjà un compte ? <Text className="font-display-medium text-indigo-400">Se connecter</Text></Text>
+            <Text className="text-sm text-ink-muted">{t("alreadyAccount")} <Text className="font-display-medium text-indigo-400">Se connecter</Text></Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
