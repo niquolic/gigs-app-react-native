@@ -16,7 +16,7 @@ export default function EditGigScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<EditGigRouteProp>();
   const insets = useSafeAreaInsets();
-  const { userId } = useAuth();
+  const { userId, t } = useAuth();
   const { id } = route.params;
 
   const [gig, setGig] = useState<Gig | null>(null);
@@ -70,7 +70,7 @@ export default function EditGigScreen() {
             <Ionicons name="create-outline" size={20} color="#8B93FF" />
           </View>
           <View>
-            <Text className="font-display text-xl text-ink">Modifier le concert</Text>
+            <Text className="font-display text-xl text-ink">{t("editGig")}</Text>
             <Text className="text-xs text-ink-muted">{gig.bands?.join(", ")}</Text>
           </View>
         </View>
@@ -83,7 +83,7 @@ export default function EditGigScreen() {
         </Pressable>
       </View>
       <GigForm
-        submitLabel="Enregistrer"
+        submitLabel={t("save")}
         submitting={submitting}
         initialValues={{
           bands: gig.bands ?? [],
