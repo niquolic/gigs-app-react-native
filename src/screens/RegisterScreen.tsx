@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { registerRequest } from "@/api/auth";
+import { getApiErrorMessage } from "@/utils/apiError";
 import { RootStackParamList } from "@/navigation/types";
 
 const CURRENCIES = [
@@ -72,9 +73,8 @@ export default function RegisterScreen() {
           },
         ],
       });
-    } catch (e: any) {
-      const data = e?.response?.data;
-      setError(typeof data === "string" && data ? data : "Impossible de créer le compte. Réessaie.");
+    } catch (e: unknown) {
+      setError(getApiErrorMessage(e, "Impossible de créer le compte. Réessaie."));
     } finally {
       setLoading(false);
     }
