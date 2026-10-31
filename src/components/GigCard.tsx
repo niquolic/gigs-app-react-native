@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Gig } from "@/types/gig";
+import { useAuth } from "@/context/AuthContext";
 
 type Props = {
   gig: Gig;
@@ -24,12 +25,12 @@ const MONTHS = [
   "DÉC",
 ];
 
-function formatDateStub(dateStr: string) {
+function formatDateStub(dateStr: string, language: "fr" | "en") {
   const d = new Date(dateStr);
   if (Number.isNaN(d.getTime())) return { day: "–", month: "", year: "" };
   return {
     day: String(d.getDate()).padStart(2, "0"),
-    month: MONTHS[d.getMonth()],
+    month: MONTHS[language][d.getMonth()],
     year: String(d.getFullYear()),
   };
 }
@@ -40,7 +41,8 @@ function formatDateStub(dateStr: string) {
  * (une app de suivi de concerts) plutôt qu'une carte générique.
  */
 export default function GigCard({ gig, onEdit, onDelete }: Props) {
-  const { day, month, year } = formatDateStub(gig.date);
+  const { preferences } = useAuth();
+  const { day, month, year } = formatDateStub(gig.date, preferences.language);
 
   return (
     <View className="relative mb-4">
