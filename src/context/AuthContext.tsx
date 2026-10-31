@@ -8,6 +8,7 @@ import {
 import { setUnauthorizedHandler } from "@/api/client";
 import { storage } from "@/utils/storage";
 import { decodeToken, isTokenExpired } from "@/utils/jwt";
+import { translate, TranslationKey } from "@/i18n/translations";
 
 const DEFAULT_PREFERENCES: UserPreferences = { language: "en", currency: "EUR" };
 
@@ -19,6 +20,7 @@ type AuthContextValue = {
   login: (login: string, password: string) => Promise<void>;
   updatePreferences: (preferences: UserPreferences) => Promise<void>;
   logout: () => Promise<void>;
+  t: (key: TranslationKey) => string;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -92,6 +94,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await storage.setPreferences(savedPreferences);
   };
 
+  const t = (key: TranslationKey) => translate(preferences.language, key);
+
   const value = useMemo(
     () => ({
       isAuthenticated,
@@ -101,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login,
       updatePreferences,
       logout,
+      t,
     }),
     [isAuthenticated, isLoading, userId, preferences]
   );
