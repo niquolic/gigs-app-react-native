@@ -73,8 +73,8 @@ export default function ProfileSidebar() {
               >
                 <View className="mb-8 flex-row items-center justify-between">
                   <View>
-                    <Text className="font-display text-2xl text-ink">Mon profil</Text>
-                    <Text className="mt-1 text-xs text-ink-muted">Tes préférences Gigs</Text>
+                    <Text className="font-display text-2xl text-ink">{t("profileTitle")}</Text>
+                    <Text className="mt-1 text-xs text-ink-muted">{t("profileSubtitle")}</Text>
                   </View>
                   <Pressable onPress={closeOverlay} hitSlop={10} accessibilityRole="button">
                     <Ionicons name="close" size={24} color="#A5ACFF" />
