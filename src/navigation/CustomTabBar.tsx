@@ -4,6 +4,7 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "@/context/AuthContext";
 
 const ICONS: Record<string, { active: any; inactive: any; label: string }> = {
   Dashboard: { active: "home", inactive: "home-outline", label: "Accueil" },
@@ -12,6 +13,7 @@ const ICONS: Record<string, { active: any; inactive: any; label: string }> = {
 
 export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useAuth();
 
   return (
     <View
@@ -63,7 +65,7 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
                 isFocused ? "font-display-medium text-indigo-400" : "text-ink-faint"
               }`}
             >
-              {meta.label}
+              {route.name === "Dashboard" ? t("home") : t("stats")}
             </Text>
           </Pressable>
         );
