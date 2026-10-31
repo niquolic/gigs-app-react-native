@@ -103,7 +103,7 @@ export default function StatsScreen() {
 
       <RankedList title={t("topBands")} icon="musical-notes-outline"
         items={bandsStats.map((band) => ({ label: band.band, count: band.count }))}
-        emptyLabel="{t("noStats")}" />
+        emptyLabel={t("noStats")} />
 
       {hasNext && (
         <Pressable onPress={loadMoreBands} disabled={loadingMore}
@@ -117,7 +117,7 @@ export default function StatsScreen() {
 
       <RankedList title={t("countries")} icon="earth-outline"
         items={countryStats.map((country) => ({ label: country.country, count: country.count }))}
-        emptyLabel="{t("noStats")}" />
+        emptyLabel={t("noStats")} />
     </ScrollView>
   );
 }
