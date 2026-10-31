@@ -10,20 +10,10 @@ type Props = {
   onDelete: (id: string) => void;
 };
 
-const MONTHS = [
-  "JANV",
-  "FÉVR",
-  "MARS",
-  "AVR",
-  "MAI",
-  "JUIN",
-  "JUIL",
-  "AOÛT",
-  "SEPT",
-  "OCT",
-  "NOV",
-  "DÉC",
-];
+const MONTHS: Record<"fr" | "en", string[]> = {
+  fr: ["JANV", "FÉVR", "MARS", "AVR", "MAI", "JUIN", "JUIL", "AOÛT", "SEPT", "OCT", "NOV", "DÉC"],
+  en: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+};
 
 function formatDateStub(dateStr: string, language: "fr" | "en") {
   const d = new Date(dateStr);
