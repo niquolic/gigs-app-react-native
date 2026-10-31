@@ -90,7 +90,7 @@ export default function StatsScreen() {
 
   return (
     <ScrollView className="flex-1 bg-night-900"
-      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 12, paddingBottom: 110 }}>
+      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 64, paddingBottom: 110 }}>
       <Text className="mb-1 text-sm text-ink-muted">Ton palmarès</Text>
       <Text className="mb-5 font-display text-2xl text-ink">Statistiques</Text>
 
