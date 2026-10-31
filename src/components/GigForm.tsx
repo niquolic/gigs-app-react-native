@@ -6,7 +6,6 @@ import {
   Pressable,
   ScrollView,
   ActivityIndicator,
-  InputAccessoryView,
   Keyboard,
   Platform,
 } from "react-native";
@@ -49,7 +48,6 @@ type FieldProps = {
   keyboardType?: "default" | "decimal-pad" | "number-pad";
   returnKeyType?: "done";
   onSubmitEditing?: () => void;
-  inputAccessoryViewID?: string;
   onFocus?: (input: TextInputInstance | null) => void;
 };
 
@@ -62,7 +60,6 @@ function Field({
   keyboardType,
   returnKeyType,
   onSubmitEditing,
-  inputAccessoryViewID,
   onFocus,
 }: FieldProps) {
   const inputRef = useRef<TextInputInstance>(null);
@@ -84,7 +81,6 @@ function Field({
           keyboardType={keyboardType}
           returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
-          inputAccessoryViewID={inputAccessoryViewID}
           className="ml-3 h-12 flex-1 text-base text-ink"
         />
       </View>
@@ -101,14 +97,17 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
   const [values, setValues] = useState<GigFormValues>(initialValues ?? emptyValues);
   const [bandDraft, setBandDraft] = useState("");
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const scrollRef = useRef<ScrollViewInstance>(null);
 
   useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
       setKeyboardVisible(true);
+      setKeyboardHeight(event.endCoordinates.height);
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
       setKeyboardVisible(false);
+      setKeyboardHeight(0);
     });
 
     return () => {
@@ -141,9 +140,12 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
       <ScrollView
         ref={scrollRef}
         className="flex-1"
-        contentContainerStyle={{ padding: 20, paddingBottom: 60 }}
+        contentContainerStyle={{ flexGrow: 1, padding: 20, paddingBottom: 160 }}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         automaticallyAdjustKeyboardInsets
+        nestedScrollEnabled
+        showsVerticalScrollIndicator={false}
       >
       <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
         Groupes / artistes
@@ -204,7 +206,6 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
         keyboardType="decimal-pad"
         returnKeyType="done"
         onSubmitEditing={Keyboard.dismiss}
-        inputAccessoryViewID="price-keyboard-accessory"
         onFocus={scrollToFocusedField}
       />
 
@@ -229,16 +230,11 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
       </Pressable>
       </ScrollView>
 
-      <InputAccessoryView nativeID="price-keyboard-accessory">
-        <View className="items-end border-t border-night-600 bg-night-800 px-4 py-2">
-          <Pressable onPress={Keyboard.dismiss} className="px-3 py-1">
-            <Text className="font-display-semibold text-indigo-400">Valider</Text>
-          </Pressable>
-        </View>
-      </InputAccessoryView>
-
-      {Platform.OS === "android" && keyboardVisible && (
-        <View className="absolute bottom-0 left-0 right-0 items-end border-t border-night-600 bg-night-800 px-4 py-2">
+      {keyboardVisible && (
+        <View
+          className="absolute left-0 right-0 items-end border-t border-night-600 bg-night-800 px-4 py-2"
+          style={{ bottom: Platform.OS === "ios" ? keyboardHeight : 0, zIndex: 10 }}
+        >
           <Pressable onPress={Keyboard.dismiss} className="px-3 py-1">
             <Text className="font-display-semibold text-indigo-400">Valider</Text>
           </Pressable>

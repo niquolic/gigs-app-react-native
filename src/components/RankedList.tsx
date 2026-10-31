@@ -15,7 +15,7 @@ const RANK_COLORS = ["#F5B942", "#C7CEDD", "#D08A5A"]; // or / argent / bronze
 
 export default function RankedList({ title, icon, items, emptyLabel }: Props) {
   return (
-    <View className="mb-4 rounded-2xl border border-night-700 bg-night-800 p-4">
+    <View className="rounded-2xl border border-night-700 bg-night-800 p-4">
       <View className="mb-3 flex-row items-center">
         <Ionicons name={icon} size={15} color="#8B93FF" />
         <Text className="ml-2 font-display-semibold text-sm text-ink">{title}</Text>

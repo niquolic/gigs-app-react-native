@@ -1,69 +1,78 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator, Pressable } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 import StatTile from "@/components/StatTile";
 import RankedList from "@/components/RankedList";
 import { useAuth } from "@/context/AuthContext";
-import {
-  getBandsStats,
-  getCountryStatsOfUser,
-  getPriceThisYear,
-  getTotalNumberOfGigs,
-  getTotalNumberOfGigsThisYear,
-  getTotalPrice,
-} from "@/api/stats";
+import { getBandsStats, getCountryStatsOfUser, getGigStats } from "@/api/stats";
 import { BandStat, CountryStat } from "@/types/gig";
 
-type StatsState = {
-  bandsStats: BandStat[];
-  countryStats: CountryStat[];
-  totalNumberOfGigs: number;
-  totalNumberOfGigsThisYear: number;
-  totalPrice: number;
-  priceThisYear: number;
-};
-
-const initialState: StatsState = {
-  bandsStats: [],
-  countryStats: [],
-  totalNumberOfGigs: 0,
-  totalNumberOfGigsThisYear: 0,
-  totalPrice: 0,
-  priceThisYear: 0,
-};
-
 export default function StatsScreen() {
-  const { userId } = useAuth();
+  const { preferences } = useAuth();
   const insets = useSafeAreaInsets();
-  const [stats, setStats] = useState<StatsState>(initialState);
+  const [bandsStats, setBandsStats] = useState<BandStat[]>([]);
+  const [countryStats, setCountryStats] = useState<CountryStat[]>([]);
+  const [gigStats, setGigStats] = useState({
+    totalNumberOfGigs: 0,
+    totalNumberOfGigsThisYear: 0,
+    totalPrice: 0,
+    priceThisYear: 0,
+  });
+  const [page, setPage] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const currencySymbol = (() => {
+    try {
+      return new Intl.NumberFormat(preferences.language === "fr" ? "fr-FR" : "en-US", {
+        style: "currency",
+        currency: preferences.currency,
+        maximumFractionDigits: 0,
+      }).formatToParts(0).find((part) => part.type === "currency")?.value ?? preferences.currency;
+    } catch {
+      return preferences.currency;
+    }
+  })();
 
   const loadStats = useCallback(async () => {
-    if (!userId) return;
     setLoading(true);
+    setPage(0);
     try {
-      const [bandsStats, countryStats, totalNumberOfGigs, totalNumberOfGigsThisYear, totalPrice, priceThisYear] =
-        await Promise.all([
-          getBandsStats(userId),
-          getCountryStatsOfUser(userId),
-          getTotalNumberOfGigs(userId),
-          getTotalNumberOfGigsThisYear(userId),
-          getTotalPrice(userId),
-          getPriceThisYear(userId),
-        ]);
-      setStats({
-        bandsStats: bandsStats ?? [],
-        countryStats: countryStats ?? [],
-        totalNumberOfGigs: totalNumberOfGigs ?? 0,
-        totalNumberOfGigsThisYear: totalNumberOfGigsThisYear ?? 0,
-        totalPrice: totalPrice ?? 0,
-        priceThisYear: priceThisYear ?? 0,
+      const [bandsPage, countries, totals] = await Promise.all([
+        getBandsStats(0),
+        getCountryStatsOfUser(),
+        getGigStats(),
+      ]);
+      setBandsStats(bandsPage?.content ?? []);
+      setHasNext(bandsPage?.hasNext ?? false);
+      setCountryStats(countries ?? []);
+      setGigStats(totals ?? {
+        totalNumberOfGigs: 0,
+        totalNumberOfGigsThisYear: 0,
+        totalPrice: 0,
+        priceThisYear: 0,
       });
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, []);
+
+  const loadMoreBands = async () => {
+    if (!hasNext || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const nextPage = page + 1;
+      const response = await getBandsStats(nextPage);
+      setBandsStats((current) => [...current, ...(response?.content ?? [])]);
+      setPage(nextPage);
+      setHasNext(response?.hasNext ?? false);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -80,33 +89,35 @@ export default function StatsScreen() {
   }
 
   return (
-    <ScrollView
-      className="flex-1 bg-night-900"
-      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 12, paddingBottom: 110 }}
-    >
+    <ScrollView className="flex-1 bg-night-900"
+      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 64, paddingBottom: 110 }}>
       <Text className="mb-1 text-sm text-ink-muted">Ton palmarès</Text>
       <Text className="mb-5 font-display text-2xl text-ink">Statistiques</Text>
 
       <View className="mb-4 flex-row flex-wrap justify-between gap-y-3">
-        <StatTile icon="ticket-outline" value={stats.totalNumberOfGigs} label="Concerts vus" />
-        <StatTile icon="calendar-outline" value={stats.totalNumberOfGigsThisYear} label="Cette année" />
-        <StatTile icon="wallet-outline" value={`${stats.totalPrice} €`} label="Dépensé au total" tint="gold" />
-        <StatTile icon="trending-up-outline" value={`${stats.priceThisYear} €`} label="Dépensé cette année" tint="gold" />
+        <StatTile icon="ticket-outline" value={gigStats.totalNumberOfGigs} label="Concerts vus" />
+        <StatTile icon="calendar-outline" value={gigStats.totalNumberOfGigsThisYear} label="Cette année" />
+        <StatTile icon="wallet-outline" value={`${gigStats.totalPrice} ${currencySymbol}`} label="Dépensé au total" tint="gold" />
+        <StatTile icon="trending-up-outline" value={`${gigStats.priceThisYear} ${currencySymbol}`} label="Dépensé cette année" tint="gold" />
       </View>
 
-      <RankedList
-        title="Groupes les plus vus"
-        icon="musical-notes-outline"
-        items={stats.bandsStats.map((b) => ({ label: b.band, count: b.count }))}
-        emptyLabel="Aucun concert renseigné pour l'instant."
-      />
+      <RankedList title="Groupes les plus vus" icon="musical-notes-outline"
+        items={bandsStats.map((band) => ({ label: band.band, count: band.count }))}
+        emptyLabel="Aucun concert renseigné pour l'instant." />
 
-      <RankedList
-        title="Pays visités"
-        icon="earth-outline"
-        items={stats.countryStats.map((c) => ({ label: c.country, count: c.count }))}
-        emptyLabel="Aucun concert renseigné pour l'instant."
-      />
+      {hasNext && (
+        <Pressable onPress={loadMoreBands} disabled={loadingMore}
+          className="mb-5 flex-row items-center justify-center rounded-xl bg-night-800 py-3">
+          {loadingMore ? <ActivityIndicator color="#8B93FF" /> : <>
+            <Text className="mr-2 font-display-medium text-sm text-indigo-300">Voir +</Text>
+            <Ionicons name="chevron-down" size={16} color="#8B93FF" />
+          </>}
+        </Pressable>
+      )}
+
+      <RankedList title="Pays visités" icon="earth-outline"
+        items={countryStats.map((country) => ({ label: country.country, count: country.count }))}
+        emptyLabel="Aucun concert renseigné pour l'instant." />
     </ScrollView>
   );
 }

@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "@/context/AuthContext";
-import environment from "@/config/env";
+import { getApiErrorMessage } from "@/utils/apiError";
 import { RootStackParamList } from "@/navigation/types";
 
 export default function LoginScreen() {
@@ -35,26 +35,14 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await login(userLogin, userPassword);
-    } catch (e: any) {
-      console.log("Login error:", e?.message, e?.code, e?.response?.status);
-      let detail = e?.response
-        ? e.response.status === 404
-          ? "Identifiants incorrects."
-          : `Erreur serveur (${e.response.status}).`
-        : "Impossible de joindre le serveur. Vérifie ta connexion.";
-      // En développement, on affiche l'URL appelée et l'erreur brute pour
-      // diagnostiquer un souci réseau (mauvaise IP, backend éteint...).
-      if (__DEV__ && !e?.response) {
-        detail += ` [${environment.apiUrl} — ${e?.message}]`;
-      }
-      setError(detail);
+    } catch (e: unknown) {
+      setError(getApiErrorMessage(e, "Impossible de se connecter. Réessaie."));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    
     <LinearGradient
       colors={["#141B2E", "#0B1120", "#080B14"]}
       className="flex-1"
