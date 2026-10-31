@@ -33,7 +33,7 @@ export default function AddGigScreen() {
   };
 
   return (
-    <View className="flex-1 bg-night-900" style={{ paddingTop: insets.top }}>
+    <View className="flex-1 bg-night-900" style={{ paddingTop: insets.top + 58 }}>
       <View className="flex-row items-center px-5 pb-2 pt-4">
         <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-indigo-500/15">
           <Ionicons name="add-circle-outline" size={20} color="#8B93FF" />
