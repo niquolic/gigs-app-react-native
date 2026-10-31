@@ -107,7 +107,7 @@ export default function StatsScreen() {
 
       {hasNext && (
         <Pressable onPress={loadMoreBands} disabled={loadingMore}
-          className="mb-5 mt-2 flex-row items-center justify-center rounded-xl border border-night-600 bg-night-800 py-3">
+          className="mb-5 flex-row items-center justify-center rounded-xl bg-night-800 py-3">
           {loadingMore ? <ActivityIndicator color="#8B93FF" /> : <>
             <Text className="mr-2 font-display-medium text-sm text-indigo-300">Voir +</Text>
             <Ionicons name="chevron-down" size={16} color="#8B93FF" />
