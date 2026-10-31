@@ -10,7 +10,7 @@ import { getBandsStats, getCountryStatsOfUser, getGigStats } from "@/api/stats";
 import { BandStat, CountryStat } from "@/types/gig";
 
 export default function StatsScreen() {
-  const { preferences } = useAuth();
+  const { preferences, t } = useAuth();
   const insets = useSafeAreaInsets();
   const [bandsStats, setBandsStats] = useState<BandStat[]>([]);
   const [countryStats, setCountryStats] = useState<CountryStat[]>([]);
@@ -91,17 +91,17 @@ export default function StatsScreen() {
   return (
     <ScrollView className="flex-1 bg-night-900"
       contentContainerStyle={{ padding: 20, paddingTop: insets.top + 64, paddingBottom: 110 }}>
-      <Text className="mb-1 text-sm text-ink-muted">Ton palmarès</Text>
-      <Text className="mb-5 font-display text-2xl text-ink">Statistiques</Text>
+      <Text className="mb-1 text-sm text-ink-muted">{t("highlights")}</Text>
+      <Text className="mb-5 font-display text-2xl text-ink">{t("statistics")}</Text>
 
       <View className="mb-4 flex-row flex-wrap justify-between gap-y-3">
-        <StatTile icon="ticket-outline" value={gigStats.totalNumberOfGigs} label="Concerts vus" />
-        <StatTile icon="calendar-outline" value={gigStats.totalNumberOfGigsThisYear} label="Cette année" />
-        <StatTile icon="wallet-outline" value={`${gigStats.totalPrice} ${currencySymbol}`} label="Dépensé au total" tint="gold" />
-        <StatTile icon="trending-up-outline" value={`${gigStats.priceThisYear} ${currencySymbol}`} label="Dépensé cette année" tint="gold" />
+        <StatTile icon="ticket-outline" value={gigStats.totalNumberOfGigs} label={t("gigsSeen")} />
+        <StatTile icon="calendar-outline" value={gigStats.totalNumberOfGigsThisYear} label={t("thisYear")} />
+        <StatTile icon="wallet-outline" value={`${gigStats.totalPrice} ${currencySymbol}`} label={t("totalSpent")} tint="gold" />
+        <StatTile icon="trending-up-outline" value={`${gigStats.priceThisYear} ${currencySymbol}`} label={t("spentThisYear")} tint="gold" />
       </View>
 
-      <RankedList title="Groupes les plus vus" icon="musical-notes-outline"
+      <RankedList title={t("topBands")} icon="musical-notes-outline"
         items={bandsStats.map((band) => ({ label: band.band, count: band.count }))}
         emptyLabel="Aucun concert renseigné pour l'instant." />
 
@@ -109,13 +109,13 @@ export default function StatsScreen() {
         <Pressable onPress={loadMoreBands} disabled={loadingMore}
           className="mb-5 flex-row items-center justify-center rounded-xl bg-night-800 py-3">
           {loadingMore ? <ActivityIndicator color="#8B93FF" /> : <>
-            <Text className="mr-2 font-display-medium text-sm text-indigo-300">Voir +</Text>
+            <Text className="mr-2 font-display-medium text-sm text-indigo-300">{t("seeMore")}</Text>
             <Ionicons name="chevron-down" size={16} color="#8B93FF" />
           </>}
         </Pressable>
       )}
 
-      <RankedList title="Pays visités" icon="earth-outline"
+      <RankedList title={t("countries")} icon="earth-outline"
         items={countryStats.map((country) => ({ label: country.country, count: country.count }))}
         emptyLabel="Aucun concert renseigné pour l'instant." />
     </ScrollView>
