@@ -141,9 +141,12 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
       <ScrollView
         ref={scrollRef}
         className="flex-1"
-        contentContainerStyle={{ padding: 20, paddingBottom: 60 }}
+        contentContainerStyle={{ flexGrow: 1, padding: 20, paddingBottom: 160 }}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         automaticallyAdjustKeyboardInsets
+        nestedScrollEnabled
+        showsVerticalScrollIndicator={false}
       >
       <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
         Groupes / artistes
