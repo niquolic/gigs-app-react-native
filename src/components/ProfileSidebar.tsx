@@ -18,7 +18,7 @@ const CURRENCIES = [
 
 export default function ProfileSidebar() {
   const insets = useSafeAreaInsets();
-  const { preferences, updatePreferences, logout } = useAuth();
+  const { preferences, updatePreferences, logout, t } = useAuth();
   const [visible, setVisible] = useState(false);
   const [picker, setPicker] = useState<"language" | "currency" | null>(null);
   const [saving, setSaving] = useState(false);
@@ -91,7 +91,7 @@ export default function ProfileSidebar() {
                 >
                   <View className="flex-row items-center">
                     <Ionicons name="language-outline" size={19} color="#8B93FF" />
-                    <Text className="ml-3 text-sm text-ink">Langue</Text>
+                    <Text className="ml-3 text-sm text-ink">{t("language")}</Text>
                   </View>
                   <View className="flex-row items-center">
                     <Text className="mr-2 text-sm font-display-medium text-indigo-300">
@@ -108,7 +108,7 @@ export default function ProfileSidebar() {
                 >
                   <View className="flex-row items-center">
                     <Ionicons name="cash-outline" size={19} color="#8B93FF" />
-                    <Text className="ml-3 text-sm text-ink">Devise</Text>
+                    <Text className="ml-3 text-sm text-ink">{t("currency")}</Text>
                   </View>
                   <View className="flex-row items-center">
                     <Text className="mr-2 text-sm font-display-medium text-indigo-300">
@@ -147,7 +147,7 @@ export default function ProfileSidebar() {
               <View className="max-h-[70%] w-full rounded-2xl border border-night-600 bg-night-800 p-4">
                 <View className="mb-3 flex-row items-center justify-between">
                   <Text className="font-display-semibold text-lg text-ink">
-                    {picker === "language" ? "Choisir une langue" : "Choisir une devise"}
+                    {picker === "language" ? t("chooseLanguage") : t("chooseCurrency")}
                   </Text>
                   <Pressable onPress={() => setPicker(null)} hitSlop={10}>
                     <Ionicons name="close" size={22} color="#A5ACFF" />
