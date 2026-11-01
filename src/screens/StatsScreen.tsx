@@ -91,7 +91,7 @@ export default function StatsScreen() {
 
   return (
     <ScrollView className="flex-1 bg-night-900"
-      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 64, paddingBottom: 110 }}>
+      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 20, paddingBottom: 110 }}>
       <View className="mb-5 flex-row items-center justify-between">
         <View className="flex-1 pr-4">
           <Text className="mb-1 text-sm text-ink-muted">{t("highlights")}</Text>
