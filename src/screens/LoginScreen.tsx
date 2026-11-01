@@ -66,7 +66,7 @@ export default function LoginScreen() {
         <View className="w-full max-w-sm rounded-3xl border border-night-600 bg-night-800/90 p-6">
           <View className="mb-4">
             <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
-              Identifiant
+              {t("identifier")}
             </Text>
             <View className="flex-row items-center rounded-xl border border-night-600 bg-night-900 px-4">
               <Ionicons name="person-outline" size={18} color="#5D6889" />
@@ -83,7 +83,7 @@ export default function LoginScreen() {
 
           <View className="mb-5">
             <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
-              Mot de passe
+              {t("password")}
             </Text>
             <View className="flex-row items-center rounded-xl border border-night-600 bg-night-900 px-4">
               <Ionicons name="lock-closed-outline" size={18} color="#5D6889" />
@@ -136,7 +136,7 @@ export default function LoginScreen() {
               ) : (
                 <>
                   <Text className="mr-2 text-base font-display-semibold text-white">
-                    Se connecter
+                    {t("login")}
                   </Text>
                   <Ionicons name="arrow-forward" size={18} color="#fff" />
                 </>
