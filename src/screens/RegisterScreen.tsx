@@ -71,12 +71,12 @@ export default function RegisterScreen() {
         routes: [
           {
             name: "Login",
-            params: { registeredMessage: "Compte créé avec succès. Connecte-toi pour continuer." },
+            params: { registeredMessage: t("registerSuccess") },
           },
         ],
       });
     } catch (e: unknown) {
-      setError(getApiErrorMessage(e, "Impossible de créer le compte. Réessaie."));
+      setError(getApiErrorMessage(e, t("registerFailed")));
     } finally {
       setLoading(false);
     }
@@ -176,7 +176,7 @@ export default function RegisterScreen() {
           </Pressable>
 
           <Pressable onPress={() => navigation.goBack()} className="mt-4 items-center" hitSlop={8}>
-            <Text className="text-sm text-ink-muted">{t("alreadyAccount")} <Text className="font-display-medium text-indigo-400">Se connecter</Text></Text>
+            <Text className="text-sm text-ink-muted">{t("alreadyAccount")} <Text className="font-display-medium text-indigo-400">{t("login")}</Text></Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -185,7 +185,7 @@ export default function RegisterScreen() {
         <Pressable onPress={() => setPreferencePicker(null)} className="flex-1 justify-center bg-black/60 px-8">
           <Pressable onPress={(event) => event.stopPropagation()} className="max-h-[70%] rounded-2xl border border-night-600 bg-night-800 p-4">
             <Text className="mb-3 font-display-semibold text-lg text-ink">
-              {preferencePicker === "currency" ? "Choisir une devise" : "Choisir une langue"}
+              {preferencePicker === "currency" ? t("chooseCurrency") : t("chooseLanguage")}
             </Text>
             <ScrollView>
               {pickerOptions.map((option) => (
