@@ -88,8 +88,8 @@ export default function DashboardScreen() {
       <Text className="text-sm text-ink-muted">{t("greeting")}</Text>
       <Text className="mt-1 font-display text-2xl text-ink">
         {gigs.length > 0
-          ? `${gigs.length} concert${gigs.length > 1 ? "s" : ""} au compteur`
-          : "Tes concerts"}
+          ? `${gigs.length} ${t("gigCounter")}`
+          : t("yourGigs")}
       </Text>
       {nextGig && (
         <View className="mt-3 flex-row items-center rounded-xl bg-indigo-500/10 px-3 py-2">
@@ -120,10 +120,10 @@ export default function DashboardScreen() {
           <Ionicons name="ticket-outline" size={36} color="#8B93FF" />
         </View>
         <Text className="mb-2 text-center font-display-semibold text-lg text-ink">
-          Aucun concert pour l'instant
+          {t("noGigs")}
         </Text>
         <Text className="mb-6 text-center text-sm text-ink-muted">
-          Ajoute ton premier concert pour commencer à construire ton historique.
+          {t("emptyGigs")}
         </Text>
         <Pressable
           onPress={() => navigation.navigate("AddGig")}
