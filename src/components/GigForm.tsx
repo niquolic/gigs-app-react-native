@@ -47,7 +47,6 @@ type FieldProps = {
   onChangeText: (t: string) => void;
   placeholder: string;
   keyboardType?: "default" | "decimal-pad" | "number-pad";
-  returnKeyType?: "done";
   onSubmitEditing?: () => void;
   onFocus?: (input: TextInputInstance | null) => void;
 };
@@ -59,7 +58,6 @@ function Field({
   onChangeText,
   placeholder,
   keyboardType,
-  returnKeyType,
   onSubmitEditing,
   onFocus,
 }: FieldProps) {
@@ -80,7 +78,6 @@ function Field({
           placeholder={placeholder}
           placeholderTextColor="#5D6889"
           keyboardType={keyboardType}
-          returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
           className="ml-3 h-12 flex-1 text-base text-ink"
         />
@@ -206,7 +203,6 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
         onChangeText={(price) => setValues({ ...values, price: price.replace(/,/g, ".") })}
         placeholder="0"
         keyboardType="decimal-pad"
-        returnKeyType="done"
         onSubmitEditing={Keyboard.dismiss}
         onFocus={scrollToFocusedField}
       />
