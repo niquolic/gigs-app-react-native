@@ -98,7 +98,7 @@ export default function ProfileSidebar() {
           {picker === null ? (
             <>
               <Animated.View
-                className="ml-auto h-full w-[82%] border-l border-night-600 bg-night-900 px-6"
+                className="absolute right-0 top-0 h-full w-[82%] border-l border-night-600 bg-night-900 px-6"
                 style={{
                   paddingTop: insets.top + 28,
                   paddingBottom: insets.bottom + 20,
@@ -170,7 +170,7 @@ export default function ProfileSidebar() {
               </Animated.View>
               <Pressable
                 onPress={closeOverlay}
-                className="flex-1"
+                className="absolute inset-0"
                 accessibilityRole="button"
                 accessibilityLabel="Fermer le profil"
               />
