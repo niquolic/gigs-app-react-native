@@ -82,7 +82,7 @@ export default function ProfileSidebar() {
                 </View>
 
                 <Text className="mb-3 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
-                  Préférences
+                  {t("preferences")}
                 </Text>
                 <Pressable
                   onPress={() => setPicker("language")}
@@ -125,7 +125,7 @@ export default function ProfileSidebar() {
                 >
                   <Ionicons name="log-out-outline" size={19} color="#F2545B" />
                   <Text className="ml-2 font-display-medium text-sm text-danger">
-                    Se déconnecter
+                    {t("logout")}
                   </Text>
                 </Pressable>
               </View>
