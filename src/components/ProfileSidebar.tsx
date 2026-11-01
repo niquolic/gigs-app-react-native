@@ -98,14 +98,14 @@ export default function ProfileSidebar() {
           {picker === null ? (
             <>
               <Animated.View
-                className="h-full w-[82%] border-r border-night-600 bg-night-900 px-6"
+                className="ml-auto h-full w-[82%] border-l border-night-600 bg-night-900 px-6"
                 style={{
                   paddingTop: insets.top + 28,
                   paddingBottom: insets.bottom + 20,
                   transform: [{
                     translateX: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [-sidebarWidth, 0],
+                      outputRange: [sidebarWidth, 0],
                     }),
                   }],
                 }}
