@@ -25,17 +25,17 @@ export default function StatsScreen() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const currencySymbol = (() => {
+  const formatCurrency = (amount: number) => {
     try {
       return new Intl.NumberFormat(preferences.language === "fr" ? "fr-FR" : "en-US", {
         style: "currency",
         currency: preferences.currency,
         maximumFractionDigits: 0,
-      }).formatToParts(0).find((part) => part.type === "currency")?.value ?? preferences.currency;
+      }).format(amount);
     } catch {
-      return preferences.currency;
+      return `${amount} ${preferences.currency}`;
     }
-  })();
+  };
 
   const loadStats = useCallback(async () => {
     setLoading(true);
@@ -97,8 +97,8 @@ export default function StatsScreen() {
       <View className="mb-4 flex-row flex-wrap justify-between gap-y-3">
         <StatTile icon="ticket-outline" value={gigStats.totalNumberOfGigs} label={t("gigsSeen")} />
         <StatTile icon="calendar-outline" value={gigStats.totalNumberOfGigsThisYear} label={t("thisYear")} />
-        <StatTile icon="wallet-outline" value={`${gigStats.totalPrice} ${currencySymbol}`} label={t("totalSpent")} tint="gold" />
-        <StatTile icon="trending-up-outline" value={`${gigStats.priceThisYear} ${currencySymbol}`} label={t("spentThisYear")} tint="gold" />
+        <StatTile icon="wallet-outline" value={formatCurrency(gigStats.totalPrice)} label={t("totalSpent")} tint="gold" />
+        <StatTile icon="trending-up-outline" value={formatCurrency(gigStats.priceThisYear)} label={t("spentThisYear")} tint="gold" />
       </View>
 
       <RankedList title={t("topBands")} icon="musical-notes-outline"
