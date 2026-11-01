@@ -13,6 +13,7 @@ import type { ScrollViewInstance, TextInputInstance } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { GigFormValues } from "@/types/gig";
+import { useAuth } from "@/context/AuthContext";
 
 type Props = {
   initialValues?: GigFormValues;
@@ -94,6 +95,7 @@ function Field({
  * la quasi-totalité de cette logique : ici elle est factorisée.
  */
 export default function GigForm({ initialValues, submitLabel, submitting, onSubmit }: Props) {
+  const { t } = useAuth();
   const [values, setValues] = useState<GigFormValues>(initialValues ?? emptyValues);
   const [bandDraft, setBandDraft] = useState("");
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -178,7 +180,7 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
           onChangeText={setBandDraft}
           onSubmitEditing={addBand}
           returnKeyType="done"
-          placeholder="Nom du groupe puis Entrée"
+          placeholder={t("bandPlaceholder")}
           placeholderTextColor="#5D6889"
           className="ml-3 h-12 flex-1 text-base text-ink"
         />
@@ -193,12 +195,12 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
         </Pressable>
       </View>
 
-      <Field label="Ville" icon="business-outline" value={values.city} onChangeText={(city) => setValues({ ...values, city })} placeholder="Paris" onFocus={scrollToFocusedField} />
-      <Field label="Salle" icon="location-outline" value={values.venue} onChangeText={(venue) => setValues({ ...values, venue })} placeholder="Zénith, Bataclan..." onFocus={scrollToFocusedField} />
-      <Field label="Pays" icon="flag-outline" value={values.country} onChangeText={(country) => setValues({ ...values, country })} placeholder="France" onFocus={scrollToFocusedField} />
-      <Field label="Date" icon="calendar-outline" value={values.date} onChangeText={(date) => setValues({ ...values, date: formatDateInput(date) })} placeholder="AAAA-MM-JJ" keyboardType="number-pad" onFocus={scrollToFocusedField} />
+      <Field label={t("city")} icon="business-outline" value={values.city} onChangeText={(city) => setValues({ ...values, city })} placeholder="Paris" onFocus={scrollToFocusedField} />
+      <Field label={t("venue")} icon="location-outline" value={values.venue} onChangeText={(venue) => setValues({ ...values, venue })} placeholder="Zénith, Bataclan..." onFocus={scrollToFocusedField} />
+      <Field label={t("country")} icon="flag-outline" value={values.country} onChangeText={(country) => setValues({ ...values, country })} placeholder="France" onFocus={scrollToFocusedField} />
+      <Field label={t("date")} icon="calendar-outline" value={values.date} onChangeText={(date) => setValues({ ...values, date: formatDateInput(date) })} placeholder="AAAA-MM-JJ" keyboardType="number-pad" onFocus={scrollToFocusedField} />
       <Field
-        label="Prix"
+        label={t("price")}
         icon="pricetag-outline"
         value={String(values.price)}
         onChangeText={(price) => setValues({ ...values, price: price.replace(/,/g, ".") })}
@@ -236,7 +238,7 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
           style={{ bottom: Platform.OS === "ios" ? keyboardHeight : 0, zIndex: 10 }}
         >
           <Pressable onPress={Keyboard.dismiss} className="px-3 py-1">
-            <Text className="font-display-semibold text-indigo-400">Valider</Text>
+            <Text className="font-display-semibold text-indigo-400">{t("keyboardDone")}</Text>
           </Pressable>
         </View>
       )}

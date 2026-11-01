@@ -26,7 +26,7 @@ type Navigation = CompositeNavigationProp<
 export default function DashboardScreen() {
   const navigation = useNavigation<Navigation>();
   const insets = useSafeAreaInsets();
-  const { userId } = useAuth();
+  const { userId, t } = useAuth();
   const [gigs, setGigs] = useState<Gig[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -66,10 +66,10 @@ export default function DashboardScreen() {
 
   const handleDelete = (gigId: string) => {
     if (!userId) return;
-    Alert.alert("Supprimer ce concert ?", "Cette action est irréversible.", [
-      { text: "Annuler", style: "cancel" },
+    Alert.alert(t("deleteGig"), t("irreversible"), [
+      { text: t("cancel"), style: "cancel" },
       {
-        text: "Supprimer",
+        text: t("delete"),
         style: "destructive",
         onPress: async () => {
           try {
@@ -85,17 +85,17 @@ export default function DashboardScreen() {
 
   const Header = (
     <View className="mb-5">
-      <Text className="text-sm text-ink-muted">Salut 👋</Text>
+      <Text className="text-sm text-ink-muted">{t("greeting")}</Text>
       <Text className="mt-1 font-display text-2xl text-ink">
         {gigs.length > 0
-          ? `${gigs.length} concert${gigs.length > 1 ? "s" : ""} au compteur`
-          : "Tes concerts"}
+          ? `${gigs.length} ${t("gigCounter")}`
+          : t("yourGigs")}
       </Text>
       {nextGig && (
         <View className="mt-3 flex-row items-center rounded-xl bg-indigo-500/10 px-3 py-2">
           <Ionicons name="sparkles-outline" size={14} color="#8B93FF" />
           <Text className="ml-2 flex-1 text-xs text-indigo-400" numberOfLines={1}>
-            Prochain : {nextGig.bands?.join(", ")} · {nextGig.venue}
+            {t("next")}: {nextGig.bands?.join(", ")} · {nextGig.venue}
           </Text>
         </View>
       )}
@@ -120,17 +120,17 @@ export default function DashboardScreen() {
           <Ionicons name="ticket-outline" size={36} color="#8B93FF" />
         </View>
         <Text className="mb-2 text-center font-display-semibold text-lg text-ink">
-          Aucun concert pour l'instant
+          {t("noGigs")}
         </Text>
         <Text className="mb-6 text-center text-sm text-ink-muted">
-          Ajoute ton premier concert pour commencer à construire ton historique.
+          {t("emptyGigs")}
         </Text>
         <Pressable
           onPress={() => navigation.navigate("AddGig")}
           className="flex-row items-center rounded-full bg-indigo-500 px-6 py-3 active:bg-indigo-600"
         >
           <Ionicons name="add" size={18} color="#fff" />
-          <Text className="ml-1 font-display-semibold text-white">Ajouter un concert</Text>
+          <Text className="ml-1 font-display-semibold text-white">{t("addGig")}</Text>
         </Pressable>
       </View>
     );

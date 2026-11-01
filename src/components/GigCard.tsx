@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Gig } from "@/types/gig";
+import { useAuth } from "@/context/AuthContext";
 
 type Props = {
   gig: Gig;
@@ -9,27 +10,17 @@ type Props = {
   onDelete: (id: string) => void;
 };
 
-const MONTHS = [
-  "JANV",
-  "FÉVR",
-  "MARS",
-  "AVR",
-  "MAI",
-  "JUIN",
-  "JUIL",
-  "AOÛT",
-  "SEPT",
-  "OCT",
-  "NOV",
-  "DÉC",
-];
+const MONTHS: Record<"fr" | "en", string[]> = {
+  fr: ["JANV", "FÉVR", "MARS", "AVR", "MAI", "JUIN", "JUIL", "AOÛT", "SEPT", "OCT", "NOV", "DÉC"],
+  en: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+};
 
-function formatDateStub(dateStr: string) {
+function formatDateStub(dateStr: string, language: "fr" | "en") {
   const d = new Date(dateStr);
   if (Number.isNaN(d.getTime())) return { day: "–", month: "", year: "" };
   return {
     day: String(d.getDate()).padStart(2, "0"),
-    month: MONTHS[d.getMonth()],
+    month: MONTHS[language][d.getMonth()],
     year: String(d.getFullYear()),
   };
 }
@@ -40,7 +31,8 @@ function formatDateStub(dateStr: string) {
  * (une app de suivi de concerts) plutôt qu'une carte générique.
  */
 export default function GigCard({ gig, onEdit, onDelete }: Props) {
-  const { day, month, year } = formatDateStub(gig.date);
+  const { preferences } = useAuth();
+  const { day, month, year } = formatDateStub(gig.date, preferences.language);
 
   return (
     <View className="relative mb-4">

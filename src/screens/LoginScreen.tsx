@@ -22,7 +22,7 @@ export default function LoginScreen() {
   const [successMessage, setSuccessMessage] = useState<string | null>(
     route.params?.registeredMessage ?? null
   );
-  const { login } = useAuth();
+  const { login, t } = useAuth();
   const [userLogin, setUserLogin] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +36,7 @@ export default function LoginScreen() {
     try {
       await login(userLogin, userPassword);
     } catch (e: unknown) {
-      setError(getApiErrorMessage(e, "Impossible de se connecter. Réessaie."));
+      setError(getApiErrorMessage(e, t("loginFailed")));
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ export default function LoginScreen() {
           </View>
           <Text className="font-display text-3xl text-ink">Gigs</Text>
           <Text className="mt-1 text-sm text-ink-muted">
-            Tous tes concerts, au même endroit
+            {t("tagline")}
           </Text>
         </View>
 
@@ -66,14 +66,14 @@ export default function LoginScreen() {
         <View className="w-full max-w-sm rounded-3xl border border-night-600 bg-night-800/90 p-6">
           <View className="mb-4">
             <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
-              Identifiant
+              {t("identifier")}
             </Text>
             <View className="flex-row items-center rounded-xl border border-night-600 bg-night-900 px-4">
               <Ionicons name="person-outline" size={18} color="#5D6889" />
               <TextInput
                 value={userLogin}
                 onChangeText={setUserLogin}
-                placeholder="ton login"
+                placeholder={t("loginPlaceholder")}
                 placeholderTextColor="#5D6889"
                 autoCapitalize="none"
                 className="ml-3 h-12 flex-1 text-base text-ink"
@@ -83,7 +83,7 @@ export default function LoginScreen() {
 
           <View className="mb-5">
             <Text className="mb-2 text-xs font-display-medium uppercase tracking-wide text-ink-faint">
-              Mot de passe
+              {t("password")}
             </Text>
             <View className="flex-row items-center rounded-xl border border-night-600 bg-night-900 px-4">
               <Ionicons name="lock-closed-outline" size={18} color="#5D6889" />
@@ -136,7 +136,7 @@ export default function LoginScreen() {
               ) : (
                 <>
                   <Text className="mr-2 text-base font-display-semibold text-white">
-                    Se connecter
+                    {t("login")}
                   </Text>
                   <Ionicons name="arrow-forward" size={18} color="#fff" />
                 </>
@@ -150,8 +150,8 @@ export default function LoginScreen() {
             hitSlop={8}
           >
             <Text className="text-sm text-ink-muted">
-              Pas encore de compte ?{" "}
-              <Text className="font-display-medium text-indigo-400">Créer un compte</Text>
+              {t("registerPrompt")}{" "}
+              <Text className="font-display-medium text-indigo-400">{t("createAccount")}</Text>
             </Text>
           </Pressable>
         </View>

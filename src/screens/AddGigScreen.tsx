@@ -13,7 +13,7 @@ import { MainTabParamList } from "@/navigation/types";
 export default function AddGigScreen() {
   const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList, "AddGig">>();
   const insets = useSafeAreaInsets();
-  const { userId } = useAuth();
+  const { userId, t } = useAuth();
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (values: GigFormValues) => {
@@ -39,11 +39,11 @@ export default function AddGigScreen() {
           <Ionicons name="add-circle-outline" size={20} color="#8B93FF" />
         </View>
         <View>
-          <Text className="font-display text-xl text-ink">Nouveau concert</Text>
-          <Text className="text-xs text-ink-muted">Ajoute-le à ta collection</Text>
+          <Text className="font-display text-xl text-ink">{t("newGig")}</Text>
+          <Text className="text-xs text-ink-muted">{t("addToCollection")}</Text>
         </View>
       </View>
-      <GigForm submitLabel="Valider" submitting={submitting} onSubmit={onSubmit} />
+      <GigForm submitLabel={t("submit")} submitting={submitting} onSubmit={onSubmit} />
     </View>
   );
 }
