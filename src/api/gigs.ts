@@ -1,18 +1,23 @@
 import apiClient from "./client";
 import { Gig, GigFormValues } from "@/types/gig";
+import { clearApiCache, withApiCache } from "./cache";
 
 /** GET /getGigsByUserId?userId= */
 export async function getGigsByUserId(userId: string): Promise<Gig[]> {
-  const response = await apiClient.get<Gig[]>("/getGigsByUserId", {
-    params: { userId },
+  return withApiCache(`gigs:list:${userId}`, async () => {
+    const response = await apiClient.get<Gig[]>("/getGigsByUserId", {
+      params: { userId },
+    });
+    return response.data;
   });
-  return response.data;
 }
 
 /** GET /getGigById?id= */
 export async function getGigById(id: number | string): Promise<Gig> {
-  const response = await apiClient.get<Gig>("/getGigById", { params: { id } });
-  return response.data;
+  return withApiCache(`gigs:detail:${id}`, async () => {
+    const response = await apiClient.get<Gig>("/getGigById", { params: { id } });
+    return response.data;
+  });
 }
 
 /** POST /addGigToList?userId= */
@@ -22,6 +27,7 @@ export async function addGig(userId: string, values: GigFormValues): Promise<voi
     { userId, ...values },
     { params: { userId } }
   );
+  clearApiCache();
 }
 
 /** POST /editGig?userId= (le body attend le gig complet, id inclus) */
@@ -31,6 +37,7 @@ export async function editGig(userId: string, gig: Gig): Promise<void> {
     responseType: "text",
     headers: { "Content-Type": "application/json" },
   });
+  clearApiCache();
 }
 
 /** DELETE /deleteGig?id= */
@@ -39,4 +46,5 @@ export async function deleteGig(id: string): Promise<void> {
     params: { id },
     responseType: "text",
   });
+  clearApiCache();
 }
