@@ -139,7 +139,7 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
       <ScrollView
         ref={scrollRef}
         className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, padding: 20, paddingBottom: 240 }}
+        contentContainerStyle={{ flexGrow: 1, padding: 20, paddingBottom: keyboardVisible ? 240 : 20 }}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         automaticallyAdjustKeyboardInsets
