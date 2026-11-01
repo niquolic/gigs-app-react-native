@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DashboardScreen from "@/screens/DashboardScreen";
 import AddGigScreen from "@/screens/AddGigScreen";
 import StatsScreen from "@/screens/StatsScreen";
-import ProfileSidebar from "@/components/ProfileSidebar";
 import CustomTabBar from "./CustomTabBar";
 import { MainTabParamList } from "./types";
 
@@ -21,7 +20,6 @@ export default function MainTabs() {
         <Tab.Screen name="AddGig" component={AddGigScreen} />
         <Tab.Screen name="Stats" component={StatsScreen} />
       </Tab.Navigator>
-      <ProfileSidebar />
     </View>
   );
 }
