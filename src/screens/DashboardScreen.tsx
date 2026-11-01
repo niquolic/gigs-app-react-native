@@ -147,7 +147,7 @@ export default function DashboardScreen() {
   return (
     <FlatList
       className="flex-1 bg-night-900"
-      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 64, paddingBottom: 110 }}
+      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 20, paddingBottom: 110 }}
       data={gigs}
       keyExtractor={(item) => String(item.id)}
       ListHeaderComponent={Header}
