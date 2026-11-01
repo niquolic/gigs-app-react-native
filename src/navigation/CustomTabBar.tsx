@@ -17,8 +17,8 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
 
   return (
     <View
-      className="absolute inset-x-5 flex-row items-center justify-between rounded-[28px] border border-night-700 bg-night-800 px-4"
-      style={{ bottom: insets.bottom -16, height: 68 }}
+      className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between rounded-t-[28px] border-t border-night-700 bg-night-800 px-5"
+      style={{ height: 68 + insets.bottom, paddingBottom: insets.bottom }}
     >
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
