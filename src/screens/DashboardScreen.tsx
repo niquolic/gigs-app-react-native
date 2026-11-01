@@ -7,6 +7,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GigCard from "@/components/GigCard";
+import ProfileSidebar from "@/components/ProfileSidebar";
 import { deleteGig, getGigsByUserId } from "@/api/gigs";
 import { useAuth } from "@/context/AuthContext";
 import { Gig } from "@/types/gig";
@@ -85,12 +86,17 @@ export default function DashboardScreen() {
 
   const Header = (
     <View className="mb-5">
-      <Text className="text-sm text-ink-muted">{t("greeting")}</Text>
-      <Text className="mt-1 font-display text-2xl text-ink">
-        {gigs.length > 0
-          ? `${gigs.length} ${t("gigCounter")}`
-          : t("yourGigs")}
-      </Text>
+      <View className="mb-3 flex-row items-center justify-between">
+        <View className="flex-1 pr-4">
+          <Text className="text-sm text-ink-muted">{t("greeting")}</Text>
+          <Text className="mt-1 font-display text-2xl text-ink">
+            {gigs.length > 0
+              ? `${gigs.length} ${t("gigCounter")}`
+              : t("yourGigs")}
+          </Text>
+        </View>
+        <ProfileSidebar />
+      </View>
       {nextGig && (
         <View className="mt-3 flex-row items-center rounded-xl bg-indigo-500/10 px-3 py-2">
           <Ionicons name="sparkles-outline" size={14} color="#8B93FF" />
@@ -112,10 +118,11 @@ export default function DashboardScreen() {
 
   if (gigs.length === 0) {
     return (
-      <View
-        className="flex-1 items-center justify-center bg-night-900 px-8"
-        style={{ paddingTop: insets.top }}
-      >
+      <View className="flex-1 bg-night-900 px-8" style={{ paddingTop: insets.top + 12 }}>
+        <View className="mb-3 flex-row items-center justify-end">
+          <ProfileSidebar />
+        </View>
+        <View className="flex-1 items-center justify-center">
         <View className="mb-5 h-20 w-20 items-center justify-center rounded-full bg-indigo-500/10">
           <Ionicons name="ticket-outline" size={36} color="#8B93FF" />
         </View>
@@ -132,6 +139,7 @@ export default function DashboardScreen() {
           <Ionicons name="add" size={18} color="#fff" />
           <Text className="ml-1 font-display-semibold text-white">{t("addGig")}</Text>
         </Pressable>
+        </View>
       </View>
     );
   }
@@ -139,7 +147,7 @@ export default function DashboardScreen() {
   return (
     <FlatList
       className="flex-1 bg-night-900"
-      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 64, paddingBottom: 110 }}
+      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 12, paddingBottom: 110 }}
       data={gigs}
       keyExtractor={(item) => String(item.id)}
       ListHeaderComponent={Header}

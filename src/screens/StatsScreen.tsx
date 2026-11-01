@@ -4,6 +4,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import StatTile from "@/components/StatTile";
+import ProfileSidebar from "@/components/ProfileSidebar";
 import RankedList from "@/components/RankedList";
 import { useAuth } from "@/context/AuthContext";
 import { getBandsStats, getCountryStatsOfUser, getGigStats } from "@/api/stats";
@@ -90,9 +91,14 @@ export default function StatsScreen() {
 
   return (
     <ScrollView className="flex-1 bg-night-900"
-      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 64, paddingBottom: 110 }}>
-      <Text className="mb-1 text-sm text-ink-muted">{t("highlights")}</Text>
-      <Text className="mb-5 font-display text-2xl text-ink">{t("statistics")}</Text>
+      contentContainerStyle={{ padding: 20, paddingTop: insets.top + 12, paddingBottom: 110 }}>
+      <View className="mb-5 flex-row items-center justify-between">
+        <View className="flex-1 pr-4">
+          <Text className="mb-1 text-sm text-ink-muted">{t("highlights")}</Text>
+          <Text className="font-display text-2xl text-ink">{t("statistics")}</Text>
+        </View>
+        <ProfileSidebar />
+      </View>
 
       <View className="mb-4 flex-row flex-wrap justify-between gap-y-3">
         <StatTile icon="ticket-outline" value={gigStats.totalNumberOfGigs} label={t("gigsSeen")} />

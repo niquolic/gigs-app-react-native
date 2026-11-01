@@ -47,7 +47,6 @@ type FieldProps = {
   onChangeText: (t: string) => void;
   placeholder: string;
   keyboardType?: "default" | "decimal-pad" | "number-pad";
-  returnKeyType?: "done";
   onSubmitEditing?: () => void;
   onFocus?: (input: TextInputInstance | null) => void;
 };
@@ -59,7 +58,6 @@ function Field({
   onChangeText,
   placeholder,
   keyboardType,
-  returnKeyType,
   onSubmitEditing,
   onFocus,
 }: FieldProps) {
@@ -80,7 +78,6 @@ function Field({
           placeholder={placeholder}
           placeholderTextColor="#5D6889"
           keyboardType={keyboardType}
-          returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
           className="ml-3 h-12 flex-1 text-base text-ink"
         />
@@ -118,9 +115,9 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
     };
   }, []);
 
-  const scrollToFocusedField = (input: TextInputInstance | null) => {
+  const scrollToFocusedField = (input: TextInputInstance | null, extraOffset = 120) => {
     if (!input) return;
-    scrollRef.current?.scrollResponderScrollNativeHandleToKeyboard(input, 120, true);
+    scrollRef.current?.scrollResponderScrollNativeHandleToKeyboard(input, extraOffset, true);
   };
 
   const addBand = () => {
@@ -142,7 +139,7 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
       <ScrollView
         ref={scrollRef}
         className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, padding: 20, paddingBottom: 160 }}
+        contentContainerStyle={{ flexGrow: 1, padding: 20, paddingBottom: keyboardVisible ? 240 : 20 }}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         automaticallyAdjustKeyboardInsets
@@ -206,9 +203,8 @@ export default function GigForm({ initialValues, submitLabel, submitting, onSubm
         onChangeText={(price) => setValues({ ...values, price: price.replace(/,/g, ".") })}
         placeholder="0"
         keyboardType="decimal-pad"
-        returnKeyType="done"
         onSubmitEditing={Keyboard.dismiss}
-        onFocus={scrollToFocusedField}
+        onFocus={(input) => scrollToFocusedField(input, 240)}
       />
 
       <Pressable

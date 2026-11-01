@@ -6,6 +6,7 @@ import {
   UserPreferences,
 } from "@/api/preferences";
 import { setUnauthorizedHandler } from "@/api/client";
+import { clearApiCache } from "@/api/cache";
 import { storage } from "@/utils/storage";
 import { decodeToken, isTokenExpired } from "@/utils/jwt";
 import { translate, TranslationKey } from "@/i18n/translations";
@@ -32,6 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES);
 
   const logout = async () => {
+    clearApiCache();
     await storage.clear();
     setIsAuthenticated(false);
     setUserId(null);
@@ -71,6 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (loginValue: string, password: string) => {
+    clearApiCache();
     const token = await loginRequest(loginValue, password);
     const decoded = decodeToken(token);
     await storage.setToken(token);
