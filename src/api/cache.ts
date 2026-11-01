@@ -41,7 +41,9 @@ export async function withApiCache<T>(
       return value;
     })
     .catch((error) => {
-      cache.delete(key);
+      if (generation === cacheGeneration) {
+        cache.delete(key);
+      }
       throw error;
     });
 
