@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   ActivityIndicator,
   Alert,
   ScrollView,
+  Animated,
+  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -22,10 +24,27 @@ export default function ProfileSidebar() {
   const [visible, setVisible] = useState(false);
   const [picker, setPicker] = useState<"language" | "currency" | null>(null);
   const [saving, setSaving] = useState(false);
+  const animation = useRef(new Animated.Value(0)).current;
+  const sidebarWidth = Dimensions.get("window").width * 0.82;
+
+  useEffect(() => {
+    if (visible) {
+      animation.setValue(0);
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 260,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible, animation]);
 
   const closeOverlay = () => {
     setPicker(null);
-    setVisible(false);
+    Animated.timing(animation, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => setVisible(false));
   };
 
   const savePreference = async (value: string) => {
@@ -62,14 +81,27 @@ export default function ProfileSidebar() {
 
       {visible && (
         <View
-          className="absolute inset-0 z-50 flex-row bg-black/60"
+          className="absolute inset-0 z-50 flex-row"
           pointerEvents="box-none"
         >
+          <Animated.View
+            className="absolute inset-0 bg-black/60"
+            style={{ opacity: animation }}
+          />
           {picker === null ? (
             <>
-              <View
+              <Animated.View
                 className="h-full w-[82%] border-r border-night-600 bg-night-900 px-6"
-                style={{ paddingTop: insets.top + 28, paddingBottom: insets.bottom + 20 }}
+                style={{
+                  paddingTop: insets.top + 28,
+                  paddingBottom: insets.bottom + 20,
+                  transform: [{
+                    translateX: animation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-sidebarWidth, 0],
+                    }),
+                  }],
+                }}
               >
                 <View className="mb-8 flex-row items-center justify-between">
                   <View>
@@ -128,7 +160,7 @@ export default function ProfileSidebar() {
                     {t("logout")}
                   </Text>
                 </Pressable>
-              </View>
+              </Animated.View>
               <Pressable
                 onPress={closeOverlay}
                 className="flex-1"
