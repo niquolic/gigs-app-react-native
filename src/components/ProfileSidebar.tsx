@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Alert,
   ScrollView,
+  Modal,
   Animated,
   Dimensions,
 } from "react-native";
@@ -71,15 +72,21 @@ export default function ProfileSidebar() {
     <>
       <Pressable
         onPress={() => setVisible(true)}
-        className="absolute left-5 z-20 h-11 w-11 items-center justify-center rounded-full border border-night-600 bg-night-800"
-        style={{ top: insets.top + 8 }}
+        className="h-11 w-11 items-center justify-center rounded-full border border-night-600 bg-night-800"
         accessibilityRole="button"
         accessibilityLabel="Ouvrir le profil"
       >
         <Ionicons name="person" size={20} color="#A5ACFF" />
       </Pressable>
 
-      {visible && (
+      <Modal
+        visible={visible}
+        transparent
+        statusBarTranslucent
+        animationType="none"
+        onRequestClose={closeOverlay}
+      >
+        {visible && (
         <View
           className="absolute inset-0 z-50 flex-row"
           pointerEvents="box-none"
@@ -209,7 +216,8 @@ export default function ProfileSidebar() {
             </View>
           )}
         </View>
-      )}
+        )}
+      </Modal>
     </>
   );
 }
