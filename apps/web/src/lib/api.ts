@@ -6,6 +6,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     headers: { ...(init.body ? { "Content-Type": "application/json" } : {}), ...init.headers },
     cache: "no-store",
   });
+  if (response.status === 401) throw new Error("Session expirée. Reconnecte-toi.");
   if (response.status === 204) return undefined as T;
   const contentType = response.headers.get("content-type") ?? "";
   const payload = contentType.includes("json") ? await response.json() : await response.text();
