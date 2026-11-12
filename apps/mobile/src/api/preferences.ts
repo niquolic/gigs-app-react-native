@@ -1,18 +1,12 @@
-import apiClient from "./client";
+import type { UserPreferences } from "@gigs/shared/api/contracts";
+import { sharedApi } from "./shared";
 
-export type UserPreferences = {
-  language: "fr" | "en";
-  currency: string;
-};
+export type { UserPreferences };
 
 export async function getUserPreferences(): Promise<UserPreferences> {
-  const response = await apiClient.get<UserPreferences>("/user/preferences");
-  return response.data;
+  return sharedApi.getPreferences();
 }
 
-export async function updateUserPreferences(
-  preferences: UserPreferences
-): Promise<UserPreferences> {
-  const response = await apiClient.put<UserPreferences>("/user/preferences", preferences);
-  return response.data;
+export async function updateUserPreferences(preferences: UserPreferences): Promise<UserPreferences> {
+  return sharedApi.updatePreferences(preferences);
 }

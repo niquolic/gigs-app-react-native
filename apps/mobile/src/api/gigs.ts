@@ -1,50 +1,27 @@
-import apiClient from "./client";
-import { Gig, GigFormValues } from "@/types/gig";
+import type { Gig, GigFormValues } from "@/types/gig";
 import { clearApiCache, withApiCache } from "./cache";
+import { sharedApi } from "./shared";
 
-/** GET /getGigsByUserId?userId= */
+/** Authenticated gig endpoints are shared with the web application. */
 export async function getGigsByUserId(userId: string): Promise<Gig[]> {
-  return withApiCache(`gigs:list:${userId}`, async () => {
-    const response = await apiClient.get<Gig[]>("/getGigsByUserId", {
-      params: { userId },
-    });
-    return response.data;
-  });
+  return withApiCache(`gigs:list:${userId}`, () => sharedApi.getGigs());
 }
 
-/** GET /getGigById?id= */
 export async function getGigById(id: number | string): Promise<Gig> {
-  return withApiCache(`gigs:detail:${id}`, async () => {
-    const response = await apiClient.get<Gig>("/getGigById", { params: { id } });
-    return response.data;
-  });
+  return withApiCache(`gigs:detail:${id}`, () => sharedApi.getGig(String(id)));
 }
 
-/** POST /addGigToList?userId= */
-export async function addGig(userId: string, values: GigFormValues): Promise<void> {
-  await apiClient.post(
-    "/addGigToList",
-    { userId, ...values },
-    { params: { userId } }
-  );
+export async function addGig(_userId: string, values: GigFormValues): Promise<void> {
+  await sharedApi.addGig(values);
   clearApiCache();
 }
 
-/** POST /editGig?userId= (le body attend le gig complet, id inclus) */
-export async function editGig(userId: string, gig: Gig): Promise<void> {
-  await apiClient.post("/editGig", gig, {
-    params: { userId },
-    responseType: "text",
-    headers: { "Content-Type": "application/json" },
-  });
+export async function editGig(_userId: string, gig: Gig): Promise<void> {
+  await sharedApi.editGig(gig);
   clearApiCache();
 }
 
-/** DELETE /deleteGig?id= */
 export async function deleteGig(id: string): Promise<void> {
-  await apiClient.delete("/deleteGig", {
-    params: { id },
-    responseType: "text",
-  });
+  await sharedApi.deleteGig(id);
   clearApiCache();
 }
