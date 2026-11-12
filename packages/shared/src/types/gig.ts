@@ -1,0 +1,4 @@
+export interface Gig { id:string; userId?:number; bands:string[]; city:string; venue:string; country:string; date:string; price:string|number; }
+export type GigFormValues={bands:string[];city:string;venue:string;country:string;date:string;price:string};
+export interface BandStat { band:string; count:number; }
+export interface CountryStat { country:string; count:number; }
