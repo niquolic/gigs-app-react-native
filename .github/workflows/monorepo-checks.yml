@@ -25,5 +25,7 @@ jobs:
         run: npm run typecheck:web
       - name: Typecheck mobile
         run: npm run typecheck:mobile
+      - name: Bundle mobile app
+        run: npm run export:mobile
       - name: Build web
         run: npm run build:web
