@@ -17,10 +17,10 @@ const ROUTES: Record<string, string[]> = {
 async function proxy(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
   const endpoint = path.join("/");
-  if (!ROUTES[endpoint]?.includes(request.method)) {
+  if (!Object.hasOwn(ROUTES, endpoint) || !ROUTES[endpoint].includes(request.method)) {
     return NextResponse.json({ message: "Endpoint not found." }, { status: 404 });
   }
-  if (request.method !== "GET" && request.method !== "DELETE") {
+  if (request.method !== "GET") {
     const origin = request.headers.get("origin");
     if (origin && origin !== request.nextUrl.origin) {
       return NextResponse.json({ message: "Cross-origin request rejected." }, { status: 403 });

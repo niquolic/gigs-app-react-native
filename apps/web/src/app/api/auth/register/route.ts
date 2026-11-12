@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 const API_URL = (process.env.GIGS_API_URL || "https://springboot-backend-513726246973.europe-west1.run.app").replace(/\/$/, "");
 
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get("origin");
+  if (origin && origin !== request.nextUrl.origin) {
+    return NextResponse.json({ message: "Cross-origin request rejected." }, { status: 403 });
+  }
   try {
     const data: unknown = await request.json();
     if (!data || typeof data !== "object" || !("login" in data) || !("password" in data) ||
@@ -22,7 +26,10 @@ export async function POST(request: NextRequest) {
     const message = await upstream.text();
     if (!upstream.ok) {
       let detail = message;
-      try { detail = JSON.parse(message).detail ?? JSON.parse(message).message ?? message; } catch { /* Plain-text backend error. */ }
+      try {
+        const problem = JSON.parse(message);
+        detail = problem.detail ?? problem.message ?? message;
+      } catch { /* Plain-text backend error. */ }
       return NextResponse.json({ message: detail || "La création du compte a échoué." }, { status: upstream.status });
     }
     return NextResponse.json({ registered: true });

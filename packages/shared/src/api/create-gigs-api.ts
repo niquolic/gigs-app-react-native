@@ -8,7 +8,10 @@ export function createGigsApi(request: ApiRequest): GigsApi {
     getGigs: () => request<Gig[]>("/getGigsByUserId"),
     getGig: (id: string) => request<Gig>(`/getGigById?id=${encodeURIComponent(id)}`),
     addGig: (values: Omit<GigFormValues, "price"> & { price: string | number }) => request<Gig>("/addGigToList", { method: "POST", body: JSON.stringify(values) }),
-    editGig: (gig: Gig) => request<Gig>("/editGig", { method: "POST", body: JSON.stringify(gig) }),
+    editGig: (gig: Gig) => {
+      const { userId: _owner, ...requestBody } = gig;
+      return request<Gig>("/editGig", { method: "POST", body: JSON.stringify(requestBody) });
+    },
     deleteGig: (id: string) => request<void>(`/deleteGig?id=${encodeURIComponent(id)}`, { method: "DELETE" }),
     getBandStats: (page = 0) => request<BandStatsPage>(`/getStatsOfUser?page=${page}`),
     getGigStats: () => request<GigStats>("/getGigStats"),

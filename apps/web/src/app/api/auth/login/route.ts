@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 const API_URL = (process.env.GIGS_API_URL || "https://springboot-backend-513726246973.europe-west1.run.app").replace(/\/$/, "");
 
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get("origin");
+  if (origin && origin !== request.nextUrl.origin) {
+    return NextResponse.json({ message: "Cross-origin request rejected." }, { status: 403 });
+  }
   try {
     const body: unknown = await request.json();
     if (!body || typeof body !== "object" || !("login" in body) || !("password" in body) ||
