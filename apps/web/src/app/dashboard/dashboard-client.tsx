@@ -135,7 +135,7 @@ export default function DashboardClient() {
 
   return (
     <main className="min-h-screen bg-[#080d19] text-slate-100">
-      <header className="flex h-16 items-center justify-between border-b border-white/10 bg-[#080d19]/80 px-4 backdrop-blur-xl sm:h-[76px] sm:px-8 lg:px-[max(24px,calc((100%-1240px)/2))]">
+      <header className="flex h-16 items-center justify-between border-b border-white/10 bg-[#080d19]/80 px-4 backdrop-blur-xl sm:h-[76px] sm:px-8 lg:px-12 xl:px-20">
         <Link className="flex items-center gap-2 text-xl font-extrabold text-white" href="/"><span className="grid size-9 place-items-center rounded-xl bg-indigo-500/15 text-xl text-indigo-300">♫</span> gigs</Link>
         <div className="flex items-center gap-2 sm:gap-3">
           <a className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 border border-white/10 bg-white/[0.03] text-slate-300 hover:bg-white/[0.08] hover:text-white" href="#preferences">{t.settings}</a>
