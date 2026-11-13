@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 import type { ScrollViewInstance, TextInputInstance } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { StyledLinearGradient as LinearGradient } from "@/components/StyledLinearGradient";
 import { Ionicons } from "@expo/vector-icons";
 import { GigFormValues } from "@/types/gig";
 import { useAuth } from "@/context/AuthContext";
