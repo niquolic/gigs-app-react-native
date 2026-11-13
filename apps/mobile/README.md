@@ -4,7 +4,7 @@ Portage mobile du front Angular [`gigs-app-angular`](https://github.com/niquolic
 Même backend, mêmes endpoints, aucune modification côté serveur.
 
 - **Framework** : Expo + React Native + TypeScript
-- **Style** : NativeWind (Tailwind CSS pour React Native) — quasiment aucun style "en dur", tout passe par des classes utilitaires (`className="..."`), comme demandé.
+- **Style** : NativeWind 5 (Tailwind CSS 4 pour React Native) — quasiment aucun style "en dur", tout passe par des classes utilitaires (`className="..."`), comme demandé.
 - **Navigation** : React Navigation (barre d'onglets Accueil / Ajouter / Statistiques + écran de modification empilé)
 - **Stockage local** : AsyncStorage (équivalent mobile de `localStorage`)
 
@@ -77,10 +77,7 @@ npm install
 npx expo start -c
 ```
 
-Toutes les versions du projet (Expo SDK 57, React 19, React Native 0.86,
-NativeWind 4.2.6, Reanimated/Worklets, React Navigation 7...) sont épinglées
-dans `package.json` pour être mutuellement compatibles — inutile d'en changer
-une isolément.
+Le projet utilise Expo SDK 58, React Native 0.88, NativeWind 5 RC1 et Tailwind CSS 4. NativeWind 5 étant encore en Release Candidate, conserve ensemble les versions `nativewind@5.0.0-rc.1` et `react-native-css@3.1.0-rc.1`. Après une modification des dépendances ou de la configuration, relance Metro avec `npx expo start --clear`.
 
 ## Structure
 
@@ -106,8 +103,7 @@ simple portage fonctionnel :
   électrique (`#6366F1`, esprit éclairage de scène) et un doré chaud
   (`#F5B942`) pour les prix — clin d'œil aux tickets de concert.
 - **Police Sora** (`@expo-google-fonts/sora`) pour les titres et les gros
-  chiffres, police système pour le reste — cohérent avec `tailwind.config.js`
-  (`font-display`, `font-display-semibold`, `font-display-medium`).
+  chiffres, police système pour le reste — déclarées dans `global.css` avec les tokens Tailwind CSS 4 (`@theme`).
 - **`GigCard`** : la liste de concerts prend la forme d'un vrai ticket
   (souche date à gauche, ligne pointillée de "déchirure", encoches sur les
   bords) plutôt qu'une carte générique.
