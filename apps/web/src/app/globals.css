@@ -1,6 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", Arial, sans-serif;
+  --color-ink: #080d19;
+  --color-panel: #111a2b;
+  --color-indigo: #7775ff;
+  --color-gold: #e8bd70;
+}
 
 :root {
   color-scheme: dark;
