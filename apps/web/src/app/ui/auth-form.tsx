@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 
 type Props = { mode: "login" | "register" };
 
+const fieldClass = "mt-2 block w-full rounded-xl border border-white/10 bg-[#080f1d] px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/10";
+const labelClass = "mb-5 block text-sm font-semibold text-slate-300";
+
 export default function AuthForm({ mode }: Props) {
   const router = useRouter();
   const [login, setLogin] = useState("");
@@ -41,26 +44,28 @@ export default function AuthForm({ mode }: Props) {
   }
 
   return (
-    <form onSubmit={submit}>
-      <label className="field">Identifiant
-        <input required autoComplete="username" value={login} onChange={(event) => setLogin(event.target.value)} placeholder="Ton identifiant" />
+    <form onSubmit={submit} className="space-y-1">
+      <label className={labelClass}>Identifiant
+        <input className={fieldClass} required autoComplete="username" value={login} onChange={(event) => setLogin(event.target.value)} placeholder="Ton identifiant" />
       </label>
-      <label className="field">Mot de passe
-        <input required minLength={mode === "register" ? 8 : undefined} type="password" autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Ton mot de passe" />
+      <label className={labelClass}>Mot de passe
+        <input className={fieldClass} required minLength={mode === "register" ? 8 : undefined} type="password" autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Ton mot de passe" />
       </label>
       {mode === "register" && <>
-        <label className="field">Confirmer le mot de passe
-          <input required minLength={8} type="password" autoComplete="new-password" value={confirm} onChange={(event) => setConfirm(event.target.value)} />
+        <label className={labelClass}>Confirmer le mot de passe
+          <input className={fieldClass} required minLength={8} type="password" autoComplete="new-password" value={confirm} onChange={(event) => setConfirm(event.target.value)} />
         </label>
-        <label className="field">Langue
-          <select value={language} onChange={(event) => setLanguage(event.target.value as "fr" | "en")}><option value="fr">Français</option><option value="en">English</option></select>
-        </label>
-        <label className="field">Devise
-          <select value={currency} onChange={(event) => setCurrency(event.target.value)}><option value="EUR">EUR — Euro</option><option value="USD">USD — Dollar américain</option><option value="GBP">GBP — Livre sterling</option><option value="CHF">CHF — Franc suisse</option></select>
-        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <label className={labelClass}>Langue
+            <select className={fieldClass} value={language} onChange={(event) => setLanguage(event.target.value as "fr" | "en")}><option value="fr">Français</option><option value="en">English</option></select>
+          </label>
+          <label className={labelClass}>Devise
+            <select className={fieldClass} value={currency} onChange={(event) => setCurrency(event.target.value)}><option value="EUR">EUR — Euro</option><option value="USD">USD — Dollar américain</option><option value="GBP">GBP — Livre sterling</option><option value="CHF">CHF — Franc suisse</option></select>
+          </label>
+        </div>
       </>}
-      {error && <p className="form-error" role="alert">{error}</p>}
-      <button className="btn btn-primary" disabled={loading}>{loading ? (mode === "login" ? "Connexion…" : "Création…") : (mode === "login" ? "Se connecter" : "Créer mon compte")}</button>
+      {error && <p className="mb-4 rounded-xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-200" role="alert">{error}</p>}
+      <button className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-indigo-500 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-950/40 transition hover:-translate-y-0.5 hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60" disabled={loading}>{loading ? (mode === "login" ? "Connexion…" : "Création…") : (mode === "login" ? "Se connecter" : "Créer mon compte")}</button>
     </form>
   );
 }
