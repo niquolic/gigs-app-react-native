@@ -1,0 +1,1 @@
+{"name":"@gigs/shared","version":"1.0.0","private":true,"type":"module","exports":{"./types/gig":"./src/types/gig.ts","./i18n/translations":"./src/i18n/translations.ts","./api/contracts":"./src/api/contracts.ts","./api/create-gigs-api":"./src/api/create-gigs-api.ts"}}

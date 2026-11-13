@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", Arial, sans-serif;
+  --color-ink: #080d19;
+  --color-panel: #111a2b;
+  --color-indigo: #7775ff;
+  --color-gold: #e8bd70;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: "DM Sans", Arial, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { margin: 0; min-height: 100vh; background: #080d19; color: #f8fafc; font-family: "DM Sans", Arial, sans-serif; }
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+::selection { background: #7775ff66; color: white; }

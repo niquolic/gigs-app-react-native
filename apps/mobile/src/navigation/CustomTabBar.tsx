@@ -1,0 +1,75 @@
+import React from "react";
+import { View, Pressable, Text } from "react-native";
+import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { StyledLinearGradient as LinearGradient } from "@/components/StyledLinearGradient";
+import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "@/context/AuthContext";
+
+const ICONS: Record<string, { active: any; inactive: any; label: string }> = {
+  Dashboard: { active: "home", inactive: "home-outline", label: "Accueil" },
+  Stats: { active: "stats-chart", inactive: "stats-chart-outline", label: "Stats" },
+};
+
+export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
+  const insets = useSafeAreaInsets();
+  const { t } = useAuth();
+
+  return (
+    <View
+      className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between rounded-t-[28px] border-t border-night-700 bg-night-800 px-5"
+      style={{ height: 68 + Math.max(insets.bottom - 12, 0), paddingBottom: Math.max(insets.bottom - 12, 0) }}
+    >
+      {state.routes.map((route, index) => {
+        const isFocused = state.index === index;
+
+        if (route.name === "AddGig") {
+          return (
+            <Pressable
+              key={route.key}
+              onPress={() => navigation.navigate(route.name)}
+              className="-top-6 active:opacity-90"
+              hitSlop={8}
+            >
+              <LinearGradient
+                colors={["#8B93FF", "#6366F1"]}
+                className="h-16 w-16 items-center justify-center rounded-full"
+                style={{
+                  shadowColor: "#6366F1",
+                  shadowOpacity: 0.5,
+                  shadowRadius: 12,
+                  shadowOffset: { width: 0, height: 6 },
+                  elevation: 8,
+                }}
+              >
+                <Ionicons name="add" size={30} color="#fff" />
+              </LinearGradient>
+            </Pressable>
+          );
+        }
+
+        const meta = ICONS[route.name];
+        return (
+          <Pressable
+            key={route.key}
+            onPress={() => navigation.navigate(route.name)}
+            className="flex-1 items-center justify-center py-2"
+          >
+            <Ionicons
+              name={isFocused ? meta.active : meta.inactive}
+              size={22}
+              color={isFocused ? "#8B93FF" : "#5D6889"}
+            />
+            <Text
+              className={`mt-1 text-[11px] ${
+                isFocused ? "font-display-medium text-indigo-400" : "text-ink-faint"
+              }`}
+            >
+              {route.name === "Dashboard" ? t("home") : t("stats")}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}

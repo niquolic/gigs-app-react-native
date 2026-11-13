@@ -1,0 +1,34 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+@import "nativewind/theme";
+
+@source "./App.tsx";
+@source "./src/**/*.{js,jsx,ts,tsx}";
+
+@theme {
+  --color-night-950: #080B14;
+  --color-night-900: #0B1120;
+  --color-night-800: #131B2E;
+  --color-night-700: #1B2540;
+  --color-night-600: #2A3555;
+
+  --color-indigo-400: #8B93FF;
+  --color-indigo-500: #6366F1;
+  --color-indigo-600: #4F46E5;
+  --color-indigo-700: #4338CA;
+
+  --color-gold-300: #FBD489;
+  --color-gold-400: #F5B942;
+  --color-gold-500: #E8A426;
+
+  --color-ink: #F3F5FA;
+  --color-ink-muted: #98A2BE;
+  --color-ink-faint: #5D6889;
+  --color-danger: #F2545B;
+  --color-success: #34D399;
+
+  --font-display: "Sora_700Bold";
+  --font-display-semibold: "Sora_600SemiBold";
+  --font-display-medium: "Sora_500Medium";
+}
