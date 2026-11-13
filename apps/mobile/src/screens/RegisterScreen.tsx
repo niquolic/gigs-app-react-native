@@ -10,7 +10,7 @@ import {
   Modal,
   ScrollView,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { StyledLinearGradient as LinearGradient } from "@/components/StyledLinearGradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
